@@ -1,7 +1,48 @@
 package rb.extendo.extensions
 
-
 fun <A,B> List<A>.cross( bs: List<B>) : List<Pair<A,B>> = CrossList(this, bs)
+fun <A,B> Iterable<A>.cross( bs: Iterable<B>) : Iterable<Pair<A,B>> = CrossIterable(this, bs) { a, b-> Pair(a,b) }
+
+fun <A,B,R> Iterable<A>.cross( bs: Iterable<B>, transform: (A, B) -> R) : Iterable<R> = CrossIterable(this, bs, transform)
+
+class CrossIterable<A,B,R>(
+    private val ait: Iterable<A>,
+    private val bit: Iterable<B>,
+    private val transform: (A, B) -> R)
+    :Iterable<R>
+{
+    override fun iterator(): Iterator<R>  = IteratorImp()
+
+    private inner class IteratorImp : Iterator<R> {
+        private var a_ = ait.iterator()
+        private val b_ = bit.iterator()
+        private var b : B? = null
+
+
+        override fun hasNext() = when {
+            a_.hasNext() -> true
+            b_.hasNext() -> {
+                b = b_.next()
+                a_ = ait.iterator()
+                a_.hasNext()
+            }
+            else -> false
+        }
+
+        override fun next(): R {
+            if( a_.hasNext()) {
+                val _b = b ?: b_.next().also { b = it }
+                return transform(a_.next(), _b)
+            }
+            else {
+                val _b = b_.next().also { b = it }
+                a_ = ait.iterator()
+                return transform(a_.next(), _b)
+            }
+        }
+    }
+}
+
 
 class CrossList<A,B>(
     private val aList: List<A>,
