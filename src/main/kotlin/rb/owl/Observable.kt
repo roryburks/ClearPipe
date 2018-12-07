@@ -6,6 +6,11 @@ interface IObserver<T> {
     fun contract(contract: Contract)
 }
 
+class Observer<T>(override val trigger: T) : IObserver<T>{
+    override fun contract(contract: Contract) {}
+}
+fun <T> T.observer() = Observer(this)
+
 interface IObservable<T> {
     fun addObserver( observer: IObserver<T>, trigger: Boolean = false) : Contract
 }
@@ -19,7 +24,7 @@ class Observable<T> : IObservable<T>
     }
 
     fun trigger(lambda : (T)->Unit) {
-        observers.forEach { it.observer.trigger?.apply(lambda) }
+        observers.removeIf { it.observer.trigger?.apply(lambda) == null }
     }
 
     private val observers = mutableListOf<MetaContract>()

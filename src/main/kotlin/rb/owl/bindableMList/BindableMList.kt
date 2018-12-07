@@ -5,7 +5,6 @@ import rb.extendo.extensions.mapRemoveIfNull
 import rb.extendo.extensions.then
 import rb.owl.Contract
 import rb.owl.IContractor
-import rb.owl.bindable.Bindable
 
 
 interface IBindableMList<T> {
@@ -17,7 +16,7 @@ interface MBindableMList<T> : IBindableMList<T> {
     override val list: MutableList<T>
     fun bindTo( root: MBindableMList<T>) : Contract
     fun respondToBind( derived: MBindableMList<T>, contract: Contract)
-    val triggers: Sequence<IMutableListTriggers<T>>
+    val triggers: Sequence<IListTriggers<T>>
 }
 
 class BindableMList<T>(list: Collection<T> = emptyList()) :
@@ -29,11 +28,11 @@ class BindableMList<T>(list: Collection<T> = emptyList()) :
     private val externalBinds = mutableListOf<ExternalBindContract>()
     private val contracts = mutableListOf<ObserverContract>()
 
-    private val myTriggers : Sequence<IMutableListTriggers<T>>
+    private val myTriggers : Sequence<IListTriggers<T>>
         get() = contracts.mapRemoveIfNull { it.observer.trigger }
             .then(externalBinds.asSequence().flatMap { it.external.triggers })
 
-    override val triggers: Sequence<IMutableListTriggers<T>> get() = underlying.triggers
+    override val triggers: Sequence<IListTriggers<T>> get() = underlying.triggers
         .then(SinglySequence(underlying.externalTrigger))
 
     override fun addObserver(observer: IMutableListObserver<T>, trigger: Boolean) =
@@ -80,23 +79,31 @@ class BindableMList<T>(list: Collection<T> = emptyList()) :
     private class Underlying<T>(col: Collection<T>, root: BindableMList<T>) {
         val list = ObservableMList(col)
 
-        val externalTrigger = object: IMutableListTriggers<T> {
-            override fun elementsAdded(inex: Int, elements: Collection<T>)
-                {list.addAll(inex,  elements)}
+        val externalTrigger = object: IListTriggers<T> {
+            override fun elementsAdded(index: Int, elements: Collection<T>)
+                {list.addAll(index,  elements)}
             override fun elementsRemoved(elements: Collection<T>)
                 {list.removeAll(elements)}
+            override fun elementsChanged(changes: Set<ListChange<T>>)
+                {list.setMany(changes)}
+            override fun elementsPermuted(permutation: ListPermuation)
+                {list.permute(permutation)}
         }
-        val internalTrigger = object : IMutableListTriggers<T> {
-            override fun elementsAdded(inex: Int, elements: Collection<T>)
-                {triggers.forEach { it.elementsAdded(inex, elements) }}
+        val internalTrigger = object : IListTriggers<T> {
+            override fun elementsAdded(index: Int, elements: Collection<T>)
+                {triggers.forEach { it.elementsAdded(index, elements) }}
             override fun elementsRemoved(elements: Collection<T>)
                 {triggers.forEach { it.elementsRemoved(elements) }}
+            override fun elementsChanged(changes: Set<ListChange<T>>)
+                {triggers.forEach { it.elementsChanged(changes) }}
+            override fun elementsPermuted(permutation: ListPermuation)
+                {triggers.forEach { it.elementsPermuted(permutation) }}
         }
 
         init {list.addObserver(internalTrigger.observer())}
 
         val bindings = mutableSetOf(root)
-        val triggers: Sequence<IMutableListTriggers<T>>
+        val triggers: Sequence<IListTriggers<T>>
             get() = bindings.asSequence().flatMap { it.myTriggers }
     }
 

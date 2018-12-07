@@ -3,7 +3,7 @@ package demos.rb.owl
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.OnChangeEvent
 import rb.owl.bindableMList.BindableMList
-import rb.owl.bindableMList.IMutableListTriggers
+import rb.owl.bindableMList.IListTriggers
 import rb.owl.jvm.WeakObserver
 
 class WeakObserverTests {
@@ -48,11 +48,11 @@ class WeakObserverTests {
     }
     class B() {
         fun doThingToBindable(bindable: BindableMList<Double>) {
-            val x = object: IMutableListTriggers<Double> {
+            val x = object: IListTriggers<Double> {
                 override fun elementsAdded(inex: Int, elements: Collection<Double>) {}
                 override fun elementsRemoved(elements: Collection<Double>) {}
             }
-            val weakObservable = WeakObserver<IMutableListTriggers<Double>>(x)
+            val weakObservable = WeakObserver<IListTriggers<Double>>(x)
             bindable.addObserver(weakObservable)
         }
 

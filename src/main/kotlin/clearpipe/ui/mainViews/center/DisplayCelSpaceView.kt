@@ -1,15 +1,11 @@
-package clearpipe.ui.mainViews
+package clearpipe.ui.mainViews.center
 
 import clearpipe.model.master.IMasterControl
 import clearpipe.model.imageData.CelSet
 import javafx.collections.FXCollections
 import javafx.scene.Parent
-import javafx.scene.control.ListCell
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
-import rb.owl.bindableMList.BindableMList
-import rb.owl.jvm.WeakObserver
-import rb.owl.jvm.javafx.adaptToJFX
 import rb.owl.jvm.javafx.bindTo
 import rb.owl.jvm.weakObserver
 import tornadofx.*

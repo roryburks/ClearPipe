@@ -8,8 +8,10 @@ import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 
+data class FileAafAnim(val name: String, val frames: List<AafFrame>)
+
 class AafFile(
-    val animations: List<AafAnimation>,
+    val animations: List<FileAafAnim>,
     val celRects: List<RectI>
 )
 
@@ -40,7 +42,7 @@ object AafFileLoader : IAafFileLoader {
                 }
                 AafFrame(chunks)
             }
-            AafAnimation(animName, frames)
+            FileAafAnim(animName, frames)
         }
 
         // Cels

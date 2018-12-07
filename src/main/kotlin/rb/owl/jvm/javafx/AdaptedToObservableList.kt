@@ -1,15 +1,19 @@
 package rb.owl.jvm.javafx
 
+import clearpipe.model.imageData.CelSet
 import javafx.beans.InvalidationListener
+import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
-import rb.owl.bindableMList.ObservableMList
+import rb.owl.Contract
+import rb.owl.bindableMList.*
 
 fun <T> ObservableMList<T>.adaptToJFX() = AdaptedToObservableList(this)
 
-class AdaptedToObservableList<T>(val list: ObservableMList<T>)
+abstract class BaseFxAdaptedObservableList<T>(val list: ObservableMList<T>)
     :ObservableList<T>
 {
+
     // region Delegated
     override fun contains(element: T) = list.contains(element)
     override fun addAll(vararg elements: T) = list.addAll(elements)
@@ -35,8 +39,6 @@ class AdaptedToObservableList<T>(val list: ObservableMList<T>)
     override fun retainAll(vararg elements: T) = list.retainAll(elements)
     override fun retainAll(elements: Collection<T>) = list.retainAll(elements)
     override fun subList(fromIndex: Int, toIndex: Int) = list.subList(fromIndex, toIndex)
-
-    override fun remove(from: Int, to: Int) = list.subList(from, to).clear()
     override fun setAll(vararg elements: T): Boolean {
         val any = list.any()
         list.clear()
@@ -51,41 +53,49 @@ class AdaptedToObservableList<T>(val list: ObservableMList<T>)
     }
     // endregion
 
-    val fxListener = object: ListChangeListener<T> {
-        override fun onChanged(c: ListChangeListener.Change<out T>) {
-            while (c.next()) {
-                when {
-                    c.wasPermutated() -> {
-                        for (old in c.from until c.to) {
-                            val new = c.getPermutation(old)
-                        }
-                    }
-                    c.wasUpdated() -> {
-                        val updated = c.get
+    override fun remove(from: Int, to: Int) = list.subList(from, to).clear()
 
-                    }
-                    else -> {
+}
 
+class AdaptedToObservableList<T>(list: ObservableMList<T>)
+    :BaseFxAdaptedObservableList<T>(list)
+{
+    private val backingList = FXCollections.observableArrayList<T>(list)
+
+    override fun addListener(listener: ListChangeListener<in T>?) {
+        backingList.addListener(listener)
+    }
+
+    override fun removeListener(listener: ListChangeListener<in T>?) {
+        backingList.removeListener(listener)
+    }
+
+    override fun addListener(listener: InvalidationListener?) {}
+    override fun removeListener(listener: InvalidationListener?) {}
+
+    init {
+        list.addObserver(object : IMutableListObserver<T> {
+            override val trigger: IListTriggers<T> = object : IListTriggers<T> {
+                override fun elementsAdded(index: Int, elements: Collection<T>) {
+                    backingList.addAll(index, elements)
+                }
+                override fun elementsRemoved(elements: Collection<T>) {
+                    backingList.removeAll(elements)
+                }
+                override fun elementsChanged(changes: Set<ListChange<T>>) {
+                    changes.forEach { backingList[it.index] = it.new}
+                }
+                override fun elementsPermuted(permutation: ListPermuation) {
+                    val old = (permutation.startIndex until permutation.endIndex)
+                        .map { backingList[it] }
+                    for (it in permutation.startIndex until permutation.endIndex) {
+                        backingList[permutation[it]] = old[it]
                     }
                 }
             }
-        }
 
-    }
-
-    override fun addListener(listener: ListChangeListener<in T>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun addListener(listener: InvalidationListener?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-    override fun removeListener(listener: ListChangeListener<in T>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun removeListener(listener: InvalidationListener?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun contract(contract: Contract) {}
+        })
     }
 
 }

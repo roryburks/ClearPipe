@@ -6,8 +6,7 @@ import rb.extendo.extensions.then
 import rb.owl.Contract
 import rb.owl.IContractor
 import rb.owl.IObserver
-
-// TODO: Support Unbind, WeakBind (or rather WeakBindable)
+import kotlin.reflect.KProperty
 
 
 class Bindable<T>(default: T)
@@ -121,4 +120,8 @@ class Bindable<T>(default: T)
             contracts.remove(this)
         }
     }
+
+
+    operator fun getValue(thisRef: Any, prop: KProperty<*>): T = field
+    operator fun setValue(thisRef:Any, prop: KProperty<*>, value: T) {field = value}
 }

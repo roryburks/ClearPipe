@@ -1,12 +1,16 @@
-package clearpipe.ui
+package clearpipe.ui.mainViews
 
 import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.master.IMasterControl
-import clearpipe.model.master.MasterControl
+import clearpipe.ui.dataFormats.Formats
 import javafx.collections.FXCollections
-import javafx.scene.layout.BackgroundFill
+import javafx.scene.control.ListCell
+import javafx.scene.input.ClipboardContent
+import javafx.scene.input.KeyCode
+import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
+import javafx.util.Callback
 import rb.owl.jvm.addWeakObserver
 import rb.owl.jvm.javafx.bindTo
 import tornadofx.*
@@ -16,9 +20,12 @@ class AnimListView(master: IMasterControl) : View() {
     val controller : AnimListController = AnimListController(master)
 
     val listview = listview(controller.values)
+
     override val root = vbox {
         add(listview)
+
         listview.vgrow = Priority.ALWAYS
+        listview.cellFactory = Callback {AafListCell(master)}
 
         hbox {
             button("1") {}
@@ -34,6 +41,34 @@ class AnimListView(master: IMasterControl) : View() {
     init {
         listview.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
             master.projectSet.current?.currentAnimation  = newValue
+        }
+    }
+}
+
+class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
+    var aaf : AafAnimation? = null
+    override fun updateItem(item: AafAnimation?, empty: Boolean) {
+        text = item?.run { "$name [${celset.name}]"}
+        aaf = item
+        super.updateItem(item, empty)
+    }
+    init {
+        setOnDragDetected {evt ->
+            val aaf  = aaf ?: return@setOnDragDetected
+            val db = startDragAndDrop(TransferMode.COPY)
+            val content = ClipboardContent()
+            content.putString(aaf.name)
+            content[Formats.internalFormat] = 1
+            db.setContent(content)
+            master.dragManager.startDragging(Formats.aafAnimFormat, aaf)
+            evt.consume()
+        }
+
+        setOnKeyPressed {
+            if( it.code == KeyCode.F2) {
+
+                it.consume()
+            }
         }
     }
 }

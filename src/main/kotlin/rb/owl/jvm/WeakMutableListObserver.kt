@@ -3,11 +3,13 @@ package rb.owl.jvm
 import rb.owl.Contract
 import rb.owl.IContractor
 import rb.owl.bindableMList.IMutableListObserver
-import rb.owl.bindableMList.IMutableListTriggers
+import rb.owl.bindableMList.IListTriggers
+import rb.owl.bindableMList.ListChange
+import rb.owl.bindableMList.ListPermuation
 import java.lang.ref.WeakReference
 
 
-class WeakMutableListObserver<T>(trigger: IMutableListTriggers<T>) :
+class WeakMutableListObserver<T>(trigger: IListTriggers<T>) :
     IMutableListObserver<T>
 {
 
@@ -36,8 +38,10 @@ class WeakMutableListObserver<T>(trigger: IMutableListTriggers<T>) :
     }
 }
 
-private class NilTrigger<T>: IMutableListTriggers<T> {
-    override fun elementsAdded(inex: Int, elements: Collection<T>) {}
+private class NilTrigger<T>: IListTriggers<T> {
+    override fun elementsChanged(changes: Set<ListChange<T>>) {}
+    override fun elementsPermuted(permutation: ListPermuation) {}
+    override fun elementsAdded(index: Int, elements: Collection<T>) {}
     override fun elementsRemoved(elements: Collection<T>) {}
 
 }

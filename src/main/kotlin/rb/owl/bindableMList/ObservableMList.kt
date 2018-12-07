@@ -1,6 +1,7 @@
 package rb.owl.bindableMList
 
 import rb.extendo.dataStructures.SinglyCollection
+import rb.extendo.dataStructures.SinglySet
 import rb.extendo.extensions.asHashSet
 import rb.owl.*
 
@@ -13,7 +14,7 @@ class ObservableMList<T>
         override fun void() { observers.remove(observer)}
     }
 
-    override fun addObserver(observer: IObserver<IMutableListTriggers<T>>, trigger: Boolean): rb.owl.Contract {
+    override fun addObserver(observer: IObserver<IListTriggers<T>>, trigger: Boolean): rb.owl.Contract {
         observers.add(observer)
         if( trigger && list.any())
             observer.trigger?.elementsAdded(0, list)
@@ -119,10 +120,22 @@ class ObservableMList<T>
 
     override fun set(index: Int, element: T): T {
         val old = list.set(index, element)
-        val removed = SinglyCollection(old)
-        val added = SinglyCollection(element)
-        observers.removeIf { it.trigger?.elementsRemoved(removed) == null }
-        observers.removeIf { it.trigger?.elementsAdded(index, added) == null }
+        val changed = SinglySet(ListChange(index, element))
+        observers.removeIf { it.trigger?.elementsChanged(changed) == null }
         return old
     }
-}
+
+    fun setMany(change: Iterable<ListChange<T>>) : Set<ListChange<T>>{
+        val oldSet =  change
+            .map { (index, new) -> ListChange(index, list.set(index, new)) }
+            .toSet()
+        val asSet = change.toSet()
+        observers.removeIf { it.trigger?.elementsChanged(asSet) == null }
+        return oldSet
+    }
+
+    fun permute(permuation: ListPermuation) : Set<ListChange<T>> {
+        return setMany( (permuation.startIndex until permuation.endIndex).asIterable()
+            .map { ListChange(permuation[it], list[it]) })
+    }
+ }

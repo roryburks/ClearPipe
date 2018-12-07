@@ -4,7 +4,7 @@ import org.junit.Test
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.onChangeObserver
 import rb.owl.bindableMList.BindableMList
-import rb.owl.bindableMList.IMutableListTriggers
+import rb.owl.bindableMList.IListTriggers
 import rb.owl.bindableMList.ObservableMList
 import rb.owl.bindableMList.observer
 import kotlin.test.assertEquals
@@ -17,7 +17,7 @@ class ObservableMListTests {
 
         var sum = 0.0
 
-        val observer = object : IMutableListTriggers<Double> {
+        val observer = object : IListTriggers<Double> {
             override fun elementsAdded(inex: Int, elements: Collection<Double>) {
                 elements.forEach{ sum += it}
             }
@@ -60,7 +60,7 @@ class ObservableMListTests {
         val bindable1 = BindableMList<Double>()
         val bindable2 = BindableMList<Double>()
         var sum = 0.0
-        val observer = object : IMutableListTriggers<Double> {
+        val observer = object : IListTriggers<Double> {
             override fun elementsAdded(inex: Int, elements: Collection<Double>) {elements.forEach { sum += it }}
             override fun elementsRemoved(elements: Collection<Double>) {elements.forEach { sum -= it }}
         }.observer()

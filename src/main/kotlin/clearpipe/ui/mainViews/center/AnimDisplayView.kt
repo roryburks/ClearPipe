@@ -1,15 +1,11 @@
-package clearpipe.ui.mainViews
+package clearpipe.ui.mainViews.center
 
 import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.master.IMasterControl
-import javafx.animation.AnimationTimer
-import javafx.animation.Timeline
-import javafx.scene.Parent
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import rb.extendo.delegates.OnChangeDelegate
 import rb.owl.bindable.addObserver
-import rb.owl.jvm.addWeakObserver
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.floor
 import rb.vectrix.mathUtil.round

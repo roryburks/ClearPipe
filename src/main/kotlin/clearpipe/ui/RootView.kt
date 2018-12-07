@@ -1,60 +1,64 @@
 package clearpipe.ui
 
+import clearpipe.ui.mainViews.AnimListView
 import javafx.scene.layout.Priority
 import clearpipe.model.Dialog
 import clearpipe.model.master.IMasterControl
 import clearpipe.model.master.MasterControl
-import clearpipe.model.io.AafFileImporter
+import clearpipe.model.master.Commands.ImportCommand
+import clearpipe.model.master.Commands.OpenCommand
+import clearpipe.ui.mainViews.ManyFramesView
+import clearpipe.ui.mainViews.center.AnimDisplayView
+import clearpipe.ui.mainViews.center.DisplayCelSpaceView
+import javafx.scene.control.TabPane
+import javafx.scene.paint.Color
 import tornadofx.*
+import kotlin.system.exitProcess
 
 
 class RootView  : View() {
     val lbl1 = label("Waiting...")
     val img = canvas()
-    val animListView : AnimListView by inject()
     val master: IMasterControl by inject<MasterControl>()
+    val animListView : AnimListView = AnimListView(master)
+    val manyFramesView = ManyFramesView(master)
 
     init {
         (master.dialog as? Dialog)?.stage = primaryStage
     }
 
-    override val root = borderpane {
-        top {
-            menubar {
-                menu("File") {
-                    item("Open", "Shortcut+O").action {
-                        val toOpen = master.dialog.promptForOpen("Open File") ?: return@action
-                        val aaf = AafFileImporter.import(toOpen)
-                        val gc = img.graphicsContext2D
-                        img.width = aaf.img.width
-                        img.height = aaf.img.height
-                        gc.drawImage(aaf.img, 0.0, 0.0, aaf.img.width/2, aaf.img.height, 0.0, 0.0, aaf.img.width/2, aaf.img.height)
-                    }
-                }
+    override val root = vbox {
+        menubar {
+            menu("File") {
+                item("Open", "Shortcut+O").action { OpenCommand.execute(master, null)}
+                item("Import", "Shortcut+I").action { ImportCommand.execute(master, null)}
             }
         }
-        center {
-            gridpane {
-
-                add(animListView.root, 0, 0, 1, 2)
-                animListView.root.gridpaneConstraints {
-                    useMaxWidth = true
-                    maxWidth = 200.0
+        hbox {
+            add(animListView.also {
+                hgrow = Priority.SOMETIMES
+            })
+            tabpane {
+                prefWidth = 500.0
+                tab("DisplayView") {
+                    add(DisplayCelSpaceView(master))
+                    tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
                 }
-
-                vbox {
-                    //style { backgroundColor +=  Color(1.0, 0.5, 0.5, 1.0) }
-                    label("Hello")
-                    add(img)
-                }.gridpaneConstraints {
-                    columnRowIndex(1,0)
-                    hGrow = Priority.ALWAYS
-                    useMaxWidth = false
+                tab("tab2"){
+                    add(AnimDisplayView(master))
+                    tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
                 }
-
-                minWidth = 600.0
+                hgrow = Priority.ALWAYS
             }
+            vgrow = Priority.ALWAYS
+            style { backgroundColor += Color.BLACK }
+            add(manyFramesView.also {
+                hgrow = Priority.SOMETIMES
+            })
         }
     }
 
+    init {
+        primaryStage.setOnCloseRequest { exitProcess(0) }
+    }
 }

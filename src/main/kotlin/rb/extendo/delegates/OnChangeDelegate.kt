@@ -1,4 +1,4 @@
-package spirite.base.util.delegates
+package rb.extendo.delegates
 
 import kotlin.reflect.KProperty
 
