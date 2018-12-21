@@ -6,8 +6,8 @@ import javafx.collections.FXCollections
 import javafx.scene.Parent
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
+import rb.owl.jvm.addWeakObserver
 import rb.owl.jvm.javafx.bindTo
-import rb.owl.jvm.weakObserver
 import tornadofx.*
 
 class DisplayCelSpaceView(private val master: IMasterControl)
@@ -25,16 +25,14 @@ class DisplayCelSpaceView(private val master: IMasterControl)
     }
     // endregion
 
-    val trigger = {new: CelSet?, old: CelSet? ->
-        celSetView.selectionModel.select(new)
-    }
+    val trigger = master.obs.currentCel.addWeakObserver { new, old -> celSetView.selectionModel.select(new)}
+
     init {
         celSetView.setOnAction {
             val selected = celSetView.selectedItem
             master.projectSet.current?.selectedCel = selected
             draw.celSet = selected
         }
-        master.obs.currentCel.addObserver(trigger.weakObserver())
     }
 }
 

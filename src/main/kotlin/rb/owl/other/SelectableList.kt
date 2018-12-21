@@ -3,7 +3,6 @@ package rb.owl.other
 import rb.owl.*
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.IBindable
-import rb.owl.bindable.MBindable
 import rb.owl.bindable.addObserver
 
 
@@ -19,7 +18,7 @@ interface ISelectableList<T> :IObservable<ISelectableListTriggers<T>> {
     val all : List<T>
 }
 interface MSelectableList<T> : ISelectableList<T> {
-    override val currentBind: MBindable<T?>
+    override val currentBind: Bindable<T?>
     override var current : T?
     fun add(t: T, select: Boolean = false)
     fun remove( t: T)
@@ -31,10 +30,6 @@ class SelectableList<T> :  MSelectableList<T> {
     override val currentBind = Bindable<T?>(null)
     override var current by currentBind
     override val all: List<T> get() = _list
-
-    init {
-        currentBind.addObserver { new, old ->underlying.trigger { it.changed(new, old) }}
-    }
 
     override fun add(t: T, select: Boolean) {
         _list.add(t)
@@ -57,4 +52,8 @@ class SelectableList<T> :  MSelectableList<T> {
     override fun addObserver(observer: IObserver<ISelectableListTriggers<T>>, trigger: Boolean) =
         underlying.addObserver(observer, trigger)
 
+
+    init {
+        currentBind.addObserver { new, old ->underlying.trigger { it.changed(new, old) }}
+    }
 }

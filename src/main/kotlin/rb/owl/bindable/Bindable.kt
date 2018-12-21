@@ -1,78 +1,43 @@
 package rb.owl.bindable
 
-import rb.extendo.dataStructures.SinglySequence
 import rb.extendo.extensions.mapRemoveIfNull
-import rb.extendo.extensions.then
-import rb.owl.Contract
-import rb.owl.IContractor
-import rb.owl.IObserver
+import rb.owl.IContract
 import kotlin.reflect.KProperty
 
-
-class Bindable<T>(default: T)
-    : MBindable<T>
+class Bindable<T>(default: T) : IBindable<T>
 {
-    private var underlying = Underlying(default, this)
+    // region Public
     override var field: T
         get() = underlying.value
         set(value) {underlying.value = value}
 
-    private val contracts = mutableListOf<ObserverContract>()
-    private val externalBinds = mutableListOf<ExternalBindContract>()
+    override fun addObserver(observer: IBindObserver<T>, trigger: Boolean): IContract = ObserverContract(observer)
+        .also { if( trigger) observer.trigger?.invoke(field, field) }
+    fun bindTo( root: Bindable<T>): IContract
+    {
+        val oldUnderlying = underlying
+        val newUnderlying = root.underlying
+        oldUnderlying.value = newUnderlying.value // Even though oldUnderlying will be discarded, this makes sure on-changes trigger
+        bindList.add(root)
 
-    private val myTriggers: Sequence<OnChangeEvent<T>>
-        get() = contracts.mapRemoveIfNull { it.observer.trigger }
-            .then(externalBinds.asSequence().flatMap { it.external.triggers })
-
-
-
-    override val triggers: Sequence<OnChangeEvent<T>> get() = underlying.triggers
-
-    override fun addObserver(observer: IBindObserver<T>, trigger: Boolean): Contract {
-        return Contract()
-            .also { it.addContractor(ObserverContract(observer)) }
-            .also { observer.contract(it) }
-    }
-
-
-    override fun bindTo(root: MBindable<T>): Contract {
-        val contract = Contract()
-
-        if( root is Bindable<T>) {
-            contract.addContractor(BindContract())
-
-            if( root.underlying != underlying) {
-                val oldUnderlying = underlying
-                val newUnderlying = root.underlying
-                underlying = newUnderlying
-
-                // have the New Underlying swallow all Old Underlyings and update all BindContracts
-                newUnderlying.bindings.addAll(oldUnderlying.bindings)
-                val oldValue = oldUnderlying.value
-                val newValue = newUnderlying.value
-                if (oldValue != newValue) {
-                    oldUnderlying.bindings.asSequence()
-                        .flatMap { it.myTriggers }
-                        .forEach { it.invoke(newValue, oldValue) }
-                }
-                oldUnderlying.bindings.clear()
-
-            }
+        val oldBinds = HashSet<Bindable<T>>()
+        fun travelOld(current: Bindable<T>)
+        {
+            if( oldBinds.contains(current)) return
+            oldBinds.add(current)
+            current.bindList.forEach { travelOld(it) }
         }
-        else {
-            underlying.value = root.field
-            contract.addContractor(ExternalBindContract(root))
-        }
-        root.respondToBind(this, contract)
-
-        return Contract()
+        travelOld(this)
+        oldBinds.forEach { it.underlying = newUnderlying }
+        return BindingContract(root)
     }
+    // endregion
 
-    override fun respondToBind(derived: MBindable<T>, contract: Contract) {
-        if( derived !is Bindable<T>)
-            contract.addContractor(ExternalBindContract(derived))
-    }
+    private var underlying = Underlying(default, this)
 
+    private val triggers get() = observers.mapRemoveIfNull { it.trigger }
+    private val observers = mutableListOf<IBindObserver<T>>()
+    private val bindList = mutableListOf<Bindable<T>>()
 
     private class Underlying<T>( default: T, root: Bindable<T>) {
         var value: T = default
@@ -85,42 +50,49 @@ class Bindable<T>(default: T)
             }
 
         val triggers : Sequence<OnChangeEvent<T>>
-            get() = bindings.asSequence().flatMap { it.myTriggers }.then(onChange)
-        val onChange = SinglySequence{new: T, _: T-> value = new}
-        val bindings = mutableSetOf(root)   // Set avoids double-binding
+            get() = bindings.asSequence().flatMap { it.triggers }
+        val bindings = hashSetOf(root)   // Set avoids double-binding
     }
 
-    private inner class ExternalBindContract(val external: MBindable<T>)
-        :IContractor
+    private inner class ObserverContract( val observer: IBindObserver<T>) : IContract
     {
-        init {externalBinds.add(this)}
-
-        override fun void() {externalBinds.remove(this)}
+        init { observers.add(observer)}
+        override fun void() {observers.remove(observer)}
     }
 
-    private inner class BindContract :IContractor
+    private inner class BindingContract(val root: Bindable<T>) : IContract
     {
-        val bindable get() = this@Bindable
-
-        init {underlying.bindings.add(bindable)}
-
         override fun void() {
-            underlying.bindings.remove(bindable)
-            bindable.underlying = Underlying(underlying.value, bindable)
+            val rootBinds = hashSetOf<Bindable<T>>()
+            val derivedBinds = hashSetOf<Bindable<T>>()
+
+            this@Bindable.bindList.remove(root)
+
+            fun travelRoot(current: Bindable<T>)
+            {
+                if( rootBinds.contains(current)) return
+                rootBinds.add(current)
+                current.bindList.forEach { travelRoot(it) }
+            }
+
+            fun travelDerived_ReturnTrueIfConnected(current: Bindable<T>) : Boolean
+            {
+                if( rootBinds.contains(current)) return true
+                if( derivedBinds.contains(current)) return false
+                derivedBinds.add(current)
+                return current.bindList.any { travelDerived_ReturnTrueIfConnected(it) }
+            }
+
+            travelRoot( root)
+            if( !travelDerived_ReturnTrueIfConnected(this@Bindable)) {
+                // Note: even though the subFun is short-circuiting on-true, on-false it will have completely filled derivedBinds
+                val newUnderlying = Underlying(underlying.value, this@Bindable)
+                val oldUnderlying = underlying
+                oldUnderlying.bindings.removeIf {derivedBinds.contains(it) }
+                newUnderlying.bindings.addAll(derivedBinds)
+            }
         }
     }
-
-
-    private inner class ObserverContract(val observer: IBindObserver<T>)
-        :IContractor
-    {
-        init {contracts.add(this)}
-
-        override fun void() {
-            contracts.remove(this)
-        }
-    }
-
 
     operator fun getValue(thisRef: Any, prop: KProperty<*>): T = field
     operator fun setValue(thisRef:Any, prop: KProperty<*>, value: T) {field = value}

@@ -10,17 +10,15 @@ class ObservableMList<T>
     (list: Collection<T> = emptyList())
     : IMutableListObservable<T>, MutableList<T>
 {
-    private inner class Contractor(private val observer: IMutableListObserver<T>) : IContractor{
+    private inner class ObserverContract(private val observer: IMutableListObserver<T>) : IContract{
         override fun void() { observers.remove(observer)}
     }
 
-    override fun addObserver(observer: IObserver<IListTriggers<T>>, trigger: Boolean): rb.owl.Contract {
+    override fun addObserver(observer: IObserver<IListTriggers<T>>, trigger: Boolean): IContract {
         observers.add(observer)
         if( trigger && list.any())
             observer.trigger?.elementsAdded(0, list)
-        return Contract()
-            .also { it.addContractor(Contractor(observer)) }
-            .also { observer.contract(it) }
+        return ObserverContract(observer)
     }
 
     private val list = list.toMutableList()

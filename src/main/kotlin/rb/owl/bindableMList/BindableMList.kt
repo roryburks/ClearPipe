@@ -1,138 +1,110 @@
 package rb.owl.bindableMList
 
-import rb.extendo.dataStructures.SinglySequence
 import rb.extendo.extensions.mapRemoveIfNull
-import rb.extendo.extensions.then
-import rb.owl.Contract
-import rb.owl.IContractor
+import rb.owl.IContract
 
 
 interface IBindableMList<T> {
     val list: List<T>
-    fun addObserver( observer: IMutableListObserver<T>, trigger: Boolean = false) : Contract
+    fun addObserver( observer: IMutableListObserver<T>, trigger: Boolean = false) : IContract
 }
 
-interface MBindableMList<T> : IBindableMList<T> {
-    override val list: MutableList<T>
-    fun bindTo( root: MBindableMList<T>) : Contract
-    fun respondToBind( derived: MBindableMList<T>, contract: Contract)
-    val triggers: Sequence<IListTriggers<T>>
-}
-
-class BindableMList<T>(list: Collection<T> = emptyList()) :
-    MBindableMList<T>
+class BindableMList<T>(col: Collection<T> = emptyList()) : IBindableMList<T>
 {
-    private var underlying = Underlying(list, this)
-    override val list : MutableList<T> get() = underlying.list
+    // region Public
+    override val list: MutableList<T> get() = underlying.list
 
-    private val externalBinds = mutableListOf<ExternalBindContract>()
-    private val contracts = mutableListOf<ObserverContract>()
+    override fun addObserver(observer: IMutableListObserver<T>, trigger: Boolean) : IContract = ObserverContract(observer)
+        .also { if( trigger) observer.trigger?.elementsAdded(0, list.toList()) }
 
-    private val myTriggers : Sequence<IListTriggers<T>>
-        get() = contracts.mapRemoveIfNull { it.observer.trigger }
-            .then(externalBinds.asSequence().flatMap { it.external.triggers })
-
-    override val triggers: Sequence<IListTriggers<T>> get() = underlying.triggers
-        .then(SinglySequence(underlying.externalTrigger))
-
-    override fun addObserver(observer: IMutableListObserver<T>, trigger: Boolean) =
-        Contract()
-            .also{it.addContractor(ObserverContract(observer))}
-            .also { observer.contract(it) }
-
-    override fun bindTo(root: MBindableMList<T>): Contract {
-        val contract = Contract()
-
-        if( root is BindableMList<T>) {
-            contract.addContractor(BindContract())
-
-            if( root.underlying != underlying) {
-                val oldUnderlying = underlying
-                val newUnderlying = root.underlying
-                underlying = newUnderlying
-
-                // have the New Underlying swallow all Old Underlyings and update all BindContracts
-                newUnderlying.bindings.addAll(oldUnderlying.bindings)
-                oldUnderlying.bindings.asSequence()
-                    .flatMap { it.myTriggers }
-                    .forEach {
-                        it.elementsRemoved(oldUnderlying.list)
-                        it.elementsAdded(0, newUnderlying.list)
-                    }
-                oldUnderlying.bindings.clear()
+    fun bindTo( root: BindableMList<T>) : IContract
+    {
+        val oldUnderlying = underlying
+        val newUnderlying = root.underlying
+        if( oldUnderlying != newUnderlying){
+            oldUnderlying.triggers.forEach {
+                it.elementsRemoved(oldUnderlying.list)
+                it.elementsAdded(0, newUnderlying.list)
             }
         }
-        else {
-            underlying.list.clear()
-            underlying.list.addAll(root.list)
-            contract.addContractor(ExternalBindContract(root))
-        }
-        root.respondToBind(this, contract)
-        return contract
-    }
+        bindList.add(root)
 
-    override fun respondToBind(derived: MBindableMList<T>, contract: Contract) {
-        if(derived !is BindableMList<T>)
-            contract.addContractor(ExternalBindContract(derived))
+        val oldBinds = HashSet<BindableMList<T>>()
+        fun travelOld(current: BindableMList<T>)
+        {
+            if( oldBinds.contains(current)) return
+            oldBinds.add(current)
+            current.bindList.forEach { travelOld(it) }
+        }
+        travelOld(this)
+        oldBinds.forEach { it.underlying = newUnderlying }
+        return BindingContract(root)
+
     }
+    // endregion
+
+    private var underlying = Underlying(col, this)
+
+    private val triggers get() = observers.mapRemoveIfNull{it.trigger}
+    private val observers = mutableListOf<IMutableListObserver<T>>()
+    private val bindList = mutableListOf<BindableMList<T>>()
+
 
     private class Underlying<T>(col: Collection<T>, root: BindableMList<T>) {
         val list = ObservableMList(col)
 
-        val externalTrigger = object: IListTriggers<T> {
-            override fun elementsAdded(index: Int, elements: Collection<T>)
-                {list.addAll(index,  elements)}
-            override fun elementsRemoved(elements: Collection<T>)
-                {list.removeAll(elements)}
-            override fun elementsChanged(changes: Set<ListChange<T>>)
-                {list.setMany(changes)}
-            override fun elementsPermuted(permutation: ListPermuation)
-                {list.permute(permutation)}
-        }
-        val internalTrigger = object : IListTriggers<T> {
-            override fun elementsAdded(index: Int, elements: Collection<T>)
+        init {
+            list.addObserver(object : IListTriggers<T> {
+                override fun elementsAdded(index: Int, elements: Collection<T>)
                 {triggers.forEach { it.elementsAdded(index, elements) }}
-            override fun elementsRemoved(elements: Collection<T>)
+                override fun elementsRemoved(elements: Collection<T>)
                 {triggers.forEach { it.elementsRemoved(elements) }}
-            override fun elementsChanged(changes: Set<ListChange<T>>)
+                override fun elementsChanged(changes: Set<ListChange<T>>)
                 {triggers.forEach { it.elementsChanged(changes) }}
-            override fun elementsPermuted(permutation: ListPermuation)
+                override fun elementsPermuted(permutation: ListPermuation)
                 {triggers.forEach { it.elementsPermuted(permutation) }}
+            }.observer())
         }
 
-        init {list.addObserver(internalTrigger.observer())}
-
-        val bindings = mutableSetOf(root)
-        val triggers: Sequence<IListTriggers<T>>
-            get() = bindings.asSequence().flatMap { it.myTriggers }
+        val triggers get() = bindings.asSequence().flatMap { it.triggers }
+        val bindings = hashSetOf(root)
     }
 
-
-    private inner class ExternalBindContract( val external: MBindableMList<T>)
-        :IContractor
-    {
-        init {externalBinds.add(this)}
-
-        override fun void() {externalBinds.remove(this)}
+    private inner class ObserverContract(val observer: IMutableListObserver<T>) : IContract {
+        init {observers.add(observer) }
+        override fun void() {observers.remove(observer)}
     }
 
-    private inner class BindContract: IContractor
-    {
-        val bindable get() = this@BindableMList
-
-        init {underlying.bindings.add(bindable)}
-
+    private inner class BindingContract(val root: BindableMList<T>) : IContract {
         override fun void() {
-            underlying.bindings.remove(bindable)
-            bindable.underlying = Underlying(underlying.list, bindable)
+            val rootBinds = hashSetOf<BindableMList<T>>()
+            val derivedBinds = hashSetOf<BindableMList<T>>()
+
+            this@BindableMList.bindList.remove(root)
+
+            fun travelRoot( current: BindableMList<T>)
+            {
+                if( rootBinds.contains(current)) return
+                rootBinds.add(current)
+                current.bindList.forEach { travelRoot(it) }
+            }
+
+            fun travelDerived_ReturnTrueIfConnected(current: BindableMList<T>) : Boolean
+            {
+                if( rootBinds.contains(current)) return true
+                if( derivedBinds.contains(current)) return false
+                derivedBinds.add(current)
+                return current.bindList.any { travelDerived_ReturnTrueIfConnected(it) }
+            }
+
+            travelRoot( root)
+            if( !travelDerived_ReturnTrueIfConnected(this@BindableMList)) {
+                // Note: even though the subFun is short-circuiting on-true, on-false it will have completely filled derivedBinds
+                val newUnderlying = Underlying(underlying.list, this@BindableMList)
+                val oldUnderlying = underlying
+                oldUnderlying.bindings.removeIf {derivedBinds.contains(it) }
+                newUnderlying.bindings.addAll(derivedBinds)
+            }
         }
-    }
-
-    private inner class ObserverContract(val observer: IMutableListObserver<T>)
-        :IContractor
-    {
-        init {contracts.add(this)}
-
-        override fun void() {contracts.remove(this)}
     }
 }

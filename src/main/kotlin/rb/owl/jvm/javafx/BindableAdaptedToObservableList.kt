@@ -4,7 +4,6 @@ import javafx.beans.InvalidationListener
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
-import rb.owl.Contract
 import rb.owl.bindableMList.*
 
 
@@ -99,8 +98,6 @@ class BindAdaptedToObservableList<T>(list: BindableMList<T>)
                     }
                 }
             }
-
-            override fun contract(contract: Contract) {}
         })
     }
 

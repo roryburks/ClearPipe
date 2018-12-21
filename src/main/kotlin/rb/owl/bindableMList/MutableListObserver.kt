@@ -30,6 +30,3 @@ fun <T> IListTriggers<T>.observer() = MutableListObserver(this)
 
 class MutableListObserver<T>(override val trigger: IListTriggers<T>) :
     IMutableListObserver<T>
-{
-    override fun contract(contract: Contract) {}
-}

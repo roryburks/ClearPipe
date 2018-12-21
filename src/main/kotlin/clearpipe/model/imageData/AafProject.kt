@@ -3,7 +3,6 @@ package clearpipe.model.imageData
 import clearpipe.model.DrawContract
 import javafx.scene.image.Image
 import rb.owl.bindable.Bindable
-import rb.owl.bindable.MBindable
 import rb.owl.bindableMList.BindableMList
 import rb.owl.bindableMList.IBindableMList
 import rb.vectrix.mathUtil.MathUtil
@@ -14,12 +13,12 @@ import rb.vectrix.shapes.RectI
 interface IAafProject {
     val animationsBind: IBindableMList<AafAnimation>
     val animations: List<AafAnimation>
-    val currentAnimationBind : MBindable<AafAnimation?>
+    val currentAnimationBind : Bindable<AafAnimation?>
     var currentAnimation : AafAnimation?
 
     val celSetsBind: IBindableMList<CelSet>
     val celSets: List<CelSet>
-    val selectedCelBind : MBindable<CelSet?>
+    val selectedCelBind : Bindable<CelSet?>
     var selectedCel : CelSet?
 
     fun import( animations: List<AafAnimation>, celset: CelSet)

@@ -5,7 +5,6 @@ import javafx.beans.InvalidationListener
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
-import rb.owl.Contract
 import rb.owl.bindableMList.*
 
 fun <T> ObservableMList<T>.adaptToJFX() = AdaptedToObservableList(this)
@@ -93,8 +92,6 @@ class AdaptedToObservableList<T>(list: ObservableMList<T>)
                     }
                 }
             }
-
-            override fun contract(contract: Contract) {}
         })
     }
 
