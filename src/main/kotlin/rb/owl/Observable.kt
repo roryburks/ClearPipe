@@ -3,25 +3,18 @@ package rb.owl
 
 interface IObserver<T> {
     val trigger: T?
-    fun contract(contract: Contract)
 }
 
-class Observer<T>(override val trigger: T) : IObserver<T>{
-    override fun contract(contract: Contract) {}
-}
+class Observer<T>(override val trigger: T) : IObserver<T>
 fun <T> T.observer() = Observer(this)
 
 interface IObservable<T> {
-    fun addObserver( observer: IObserver<T>, trigger: Boolean = false) : Contract
+    fun addObserver( observer: IObserver<T>, trigger: Boolean = false) : IContract
 }
 
 class Observable<T> : IObservable<T>
 {
-    override fun addObserver(observer: IObserver<T>, trigger: Boolean): Contract {
-        return Contract()
-            .also { observers.add(MetaContract(observer)) }
-            .also { observer.contract(it) }
-    }
+    override fun addObserver(observer: IObserver<T>, trigger: Boolean): IContract = MetaContract(observer)
 
     fun trigger(lambda : (T)->Unit) {
         observers.removeIf { it.observer.trigger?.apply(lambda) == null }
@@ -29,7 +22,7 @@ class Observable<T> : IObservable<T>
 
     private val observers = mutableListOf<MetaContract>()
 
-    private inner class MetaContract(val observer: IObserver<T>) : IContractor {
+    private inner class MetaContract(val observer: IObserver<T>) : IContract {
         override fun void() {observers.remove(this)}
     }
 }
