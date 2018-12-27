@@ -40,11 +40,11 @@ class RootView  : View() {
             })
             tabpane {
                 prefWidth = 500.0
-                tab("DisplayView") {
+                tab("Png") {
                     add(DisplayCelSpaceView(master))
                     tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
                 }
-                tab("tab2"){
+                tab("Anim"){
                     add(AnimDisplayView(master))
                     tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
                 }

@@ -9,7 +9,7 @@ class Observer<T>(override val trigger: T) : IObserver<T>
 fun <T> T.observer() = Observer(this)
 
 interface IObservable<T> {
-    fun addObserver( observer: IObserver<T>, trigger: Boolean = false) : IContract
+    fun addObserver( observer: IObserver<T>, trigger: Boolean = true) : IContract
 }
 
 class Observable<T> : IObservable<T>
@@ -23,6 +23,7 @@ class Observable<T> : IObservable<T>
     private val observers = mutableListOf<MetaContract>()
 
     private inner class MetaContract(val observer: IObserver<T>) : IContract {
+        init {observers.add(this)}
         override fun void() {observers.remove(this)}
     }
 }
