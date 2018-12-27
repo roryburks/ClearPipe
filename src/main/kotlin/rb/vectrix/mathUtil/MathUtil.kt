@@ -4,31 +4,16 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 object MathUtil {
-    fun packInt(high: Int, low: Int) = high and 0xffff shl 16 or (low and 0xffff)
-    fun low16(i: Int) = i and 0xffff
-    fun high16(i: Int) = i.ushr(16)
-
     fun distance(x1: Double, y1: Double, x2: Double, y2: Double): Double {
         return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
     }
+
     fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
-        return sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)).d).f
+        return sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)).toDouble()).toFloat()
     }
 
-    fun clip(min: Int, value: Int, max: Int): Int {
-        if (value < min) return min
-        return if (value > max) max else value
-    }
-    fun clip(min: Float, value: Float, max: Float): Float {
-        if (value < min) return min
-        return if (value > max) max else value
-    }
-    fun clip(min: Double, value: Double, max: Double): Double {
-        if (value < min) return min
-        return if (value > max) max else value
-    }
 
-    fun cycle( start: Int, end: Int, t: Int) = when( val diff = end - start){
+    fun cycle(start: Int, end: Int, t: Int) = when( val diff = end - start){
         0 -> 0
         else -> ((t - start) % diff + diff) % diff + start
     }
@@ -65,14 +50,14 @@ object MathUtil {
                 else -> c
             }
             c == null -> b
-            else -> min(b, c)
+            else -> min(b,c)
         }
         b == null -> when {
             c == null -> a
-            else -> min(a, c)
+            else -> min(a,c)
         }
         else -> when {
-            c == null -> min(a, b)
+            c == null -> min(a,b)
             else -> minOf(a,b,c)
         }
     }
@@ -93,14 +78,14 @@ object MathUtil {
                 else -> c
             }
             c == null -> b
-            else -> min(b, c)
+            else -> min(b,c)
         }
         b == null -> when {
             c == null -> a
-            else -> min(a, c)
+            else -> min(a,c)
         }
         else -> when {
-            c == null -> min(a, b)
+            c == null -> min(a,b)
             else -> minOf(a,b,c)
         }
     }

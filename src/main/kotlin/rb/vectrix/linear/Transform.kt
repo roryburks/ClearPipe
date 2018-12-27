@@ -27,8 +27,6 @@ interface ITransform
         m10 * v.x + m11 * v.y + m12
     )
 
-    val determinant get() = m00*m11 - m01*m10
-
     fun invert() : ITransform?
 
     fun toImmutable() : ImmutableTrasform
@@ -43,7 +41,7 @@ sealed class MutableTransform : ITransform
 
 interface ITransformD : ITransform
 {
-    override val determinant get() = m00*m11 - m01 * m10
+    val determinant get() = m00*m11 - m01 * m10
 
     override fun invert(): ImmutableTransformD? {
         val det = m00*m11 - m01*m10
@@ -251,8 +249,6 @@ interface ITransformF : ITransform
     override val m11 : Double get() = m11f.d
     override val m12 : Double get() = m12f.d
 
-    val determinantF get() = m00f*m11f - m01f*m10f
-
     operator fun times( tx : ITransformF) = ImmutableTransformF(
         m00f * tx.m00f + m01f * tx.m10f,
         m00f * tx.m01f + m01f * tx.m11f,
@@ -296,7 +292,6 @@ data class ImmutableTransformF(
 {
     override fun toImmutable() = this
     override fun toMutable() = MutableTransformF(m00f, m01f, m02f, m10f, m11f, m12f)
-
 
     companion object {
         val Identity = ImmutableTransformF(1f, 0f, 0f, 0f, 1f, 0f)

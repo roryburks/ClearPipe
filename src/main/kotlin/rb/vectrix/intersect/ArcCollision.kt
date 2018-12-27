@@ -1,8 +1,8 @@
 package rb.vectrix.intersect
 
 import rb.vectrix.linear.Vec2
-import rb.vectrix.mathUtil.Circle
-import rb.vectrix.mathUtil.CircleD
+import rb.vectrix.shapes.Circle
+import rb.vectrix.shapes.CircleD
 import rb.vectrix.mathUtil.MathUtil
 import rb.vectrix.shapes.*
 import kotlin.math.PI

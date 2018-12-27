@@ -58,7 +58,10 @@ class AafAnimation(
     }
 }
 class AafFrame(
-    val chunks: List<AafChunk>
+    val chunks: List<AafChunk>,
+    var ox: Double = 0.0,
+    var oy: Double = 0.0
+
 )
 class AafChunk(
     val celId: Int,

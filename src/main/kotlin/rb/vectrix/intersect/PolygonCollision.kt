@@ -1,6 +1,6 @@
 package rb.vectrix.intersect
 
-import rb.vectrix.mathUtil.Circle
+import rb.vectrix.shapes.Circle
 import rb.vectrix.shapes.*
 
 /*** NOTE:  All Polygon related collision assumes that the Polygon is "well-formed", meaning that its LineSegments

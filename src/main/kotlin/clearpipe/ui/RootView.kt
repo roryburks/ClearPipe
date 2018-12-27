@@ -10,6 +10,7 @@ import clearpipe.model.master.Commands.OpenCommand
 import clearpipe.ui.mainViews.ManyFramesView
 import clearpipe.ui.mainViews.center.AnimDisplayView
 import clearpipe.ui.mainViews.center.DisplayCelSpaceView
+import clearpipe.ui.mainViews.center.HitboxView
 import javafx.scene.control.TabPane
 import javafx.scene.paint.Color
 import tornadofx.*
@@ -46,6 +47,10 @@ class RootView  : View() {
                 }
                 tab("Anim"){
                     add(AnimDisplayView(master))
+                    tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
+                }
+                tab("Hitbox") {
+                    add(HitboxView(master))
                     tabClosingPolicy = TabPane.TabClosingPolicy.UNAVAILABLE
                 }
                 hgrow = Priority.ALWAYS

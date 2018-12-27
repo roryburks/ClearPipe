@@ -2,7 +2,6 @@ package rb.vectrix.intersect
 
 import rb.vectrix.linear.Vec2
 import rb.vectrix.linear.Vec2d
-import rb.vectrix.mathUtil.Circle
 import rb.vectrix.mathUtil.MathUtil
 import rb.vectrix.shapes.*
 import kotlin.math.*

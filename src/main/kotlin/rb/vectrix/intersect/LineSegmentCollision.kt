@@ -1,6 +1,6 @@
 package rb.vectrix.intersect
 
-import rb.vectrix.mathUtil.Circle
+import rb.vectrix.shapes.Circle
 import rb.vectrix.mathUtil.MathUtil
 import rb.vectrix.shapes.*
 import kotlin.math.abs

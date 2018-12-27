@@ -1,4 +1,4 @@
-package rb.vectrix.mathUtil
+package rb.vectrix.shapes
 
 import kotlin.math.abs
 
@@ -15,7 +15,7 @@ private constructor(
     override val x: Double,
     override val y: Double,
     override val r: Double)
-    :Circle()
+    : Circle()
 {
     companion object {
         fun Make(x: Double, y: Double, r:Double) = CircleD(x, y, abs(r))
