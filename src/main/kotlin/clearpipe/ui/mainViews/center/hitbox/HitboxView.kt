@@ -1,11 +1,13 @@
 package clearpipe.ui.mainViews.center.hitbox
 
 import clearpipe.canvasFxDraws.draw
+import clearpipe.canvasFxDraws.shift
 import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.master.IMasterControl
 import javafx.scene.Parent
 import javafx.scene.control.Button
 import javafx.scene.control.Tooltip
+import javafx.scene.input.KeyCode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
@@ -101,18 +103,49 @@ class HitboxDrawView(val penner: IHitboxPenner) : View() {
 
     init {
         canvas.setOnMousePressed {
+            canvas.requestFocus()
             penner.mouseDown(it.x - shiftX, it.y - shiftY, it.isShiftDown, it.isControlDown)
             if( penner.isDrawn)
                 redraw()
         }
         canvas.setOnMouseDragged {
+            canvas.requestFocus()
             penner.mouseDrag(it.x - shiftX, it.y - shiftY, it.isShiftDown, it.isControlDown)
             if( penner.isDrawn)
                 redraw()
         }
         canvas.setOnMouseReleased {
+            canvas.requestFocus()
             penner.mouseUp(it.x - shiftX, it.y - shiftY, it.isShiftDown, it.isControlDown)
             redraw()
+        }
+
+
+        canvas.setOnKeyPressed {
+            when(it.code) {
+                KeyCode.DELETE -> {
+                    val anim = anim ?: return@setOnKeyPressed
+                    val frame = anim.getFrame(met)
+                    frame.hboxes.remove(penner.selectedBox)
+                    redraw()
+                }
+                KeyCode.UP -> if( it.isControlDown && it.isShiftDown) {
+                    penner.selectedBox?.run { col = col.shift(0.0, -1.0)}
+                    redraw()
+                }
+                KeyCode.DOWN -> if( it.isControlDown && it.isShiftDown) {
+                    penner.selectedBox?.run { col = col.shift(0.0, 1.0)}
+                    redraw()
+                }
+                KeyCode.LEFT -> if( it.isControlDown && it.isShiftDown) {
+                    penner.selectedBox?.run { col = col.shift(-1.0, 0.0)}
+                    redraw()
+                }
+                KeyCode.RIGHT -> if( it.isControlDown && it.isShiftDown) {
+                    penner.selectedBox?.run { col = col.shift(1.0, 0.0)}
+                    redraw()
+                }
+            }
         }
     }
 
@@ -143,12 +176,19 @@ class HitboxDrawView(val penner: IHitboxPenner) : View() {
         }
 
         anim.getFrame(met).hboxes.forEach {
-            val c = colorMap[it.typeId.i] ?: Color.WHITESMOKE
+            val c = colorMap[it.typeId.i] ?: Color.CYAN
 
-            gc.stroke = Color(c.red, c.green, c.blue, 0.7)
+            if( penner.selectedBox == it) {
+                gc.fill = Color.TRANSPARENT
+                val ci = c.invert()
+                gc.stroke = Color(ci.red,ci.green,ci.blue,1.0)
+                gc.lineWidth = 2.5
+                it.col.draw(gc)
+            }
+
             gc.lineWidth = 1.5
-
             gc.fill = Color(c.red, c.green, c.blue, 0.3)
+            gc.stroke = Color(c.red, c.green, c.blue, 0.7)
             it.col.draw(gc)
             gc.lineWidth = 1.0
         }

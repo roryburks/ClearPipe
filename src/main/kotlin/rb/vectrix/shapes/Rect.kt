@@ -24,7 +24,7 @@ abstract class Rect
         var th = this.h
         var rw = r.w
         var rh = r.h
-        if (rw <= 0 || rh <= 0 || tw <= 0 || th <= 0) {
+        if (rw < 0 || rh < 0 || tw < 0 || th < 0) {
             return false
         }
         val tx = this.x1

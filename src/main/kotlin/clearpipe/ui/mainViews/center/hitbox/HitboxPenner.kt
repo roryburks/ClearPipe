@@ -2,13 +2,12 @@ package clearpipe.ui.mainViews.center.hitbox
 
 import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.imageData.AafHitbox
+import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingCircleBehavior
+import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingRectangleBehavior
 import javafx.scene.canvas.GraphicsContext
-import javafx.scene.paint.Color
 import rb.extendo.delegates.OnChangeDelegate
 import rb.owl.bindable.Bindable
-import rb.vectrix.intersect.CollisionRigidRect
-import rb.vectrix.mathUtil.s
-import rb.vectrix.shapes.RectD
+import rb.vectrix.intersect.CollisionPoint
 
 interface IHitboxPenner
 {
@@ -54,9 +53,15 @@ class HitboxPenner(
         this.holdingCtrl = holdingCtrl
         val tool = toolset.tool
         when {
-            holdingCtrl-> {}
+            holdingCtrl->  selectedBox = getSelected() ?: selectedBox
             tool == HitboxTool.Rectangle -> behavior = BuildingRectangleBehavior()
+            tool == HitboxTool.Circle -> behavior = BuildingCircleBehavior()
         }
+    }
+
+    fun getSelected() : AafHitbox? {
+        val point = CollisionPoint(x,y)
+        return animation?.getFrame(met)?.hboxes?.firstOrNull{point.intersects(it.col)}
     }
 
     override fun mouseUp(x: Double, y: Double, holdingShift: Boolean, holdingCtrl: Boolean) {
@@ -94,28 +99,3 @@ interface IDrawnHitboxPennerBehavior : IHitboxPennerBehavior {
     fun draw(penner: HitboxPenner, gc: GraphicsContext) {}
 }
 
-class BuildingRectangleBehavior : IDrawnHitboxPennerBehavior {
-    var startX = 0.0
-    var startY = 0.0
-
-    override fun onStart(penner: HitboxPenner) {
-        startX = penner.x
-        startY = penner.y
-    }
-
-    override fun onEnd(penner: HitboxPenner) {
-        val frame = penner.animation?.getFrame(penner.met) ?: return
-        val uid = (frame.hboxes.asSequence().map { it.typeId }.max()?:0) + 1
-        frame.hboxes.add(AafHitbox(uid.s, CollisionRigidRect(RectD.FromEndpoints(startX, startY, penner.x, penner.y))))
-    }
-
-    override fun draw(penner: HitboxPenner, gc: GraphicsContext) {
-        gc.lineWidth = 1.5
-        gc.stroke = Color.YELLOWGREEN
-        val rect = RectD.FromEndpoints(startX, startY, penner.x, penner.y)
-        gc.fillRect(rect.x1, rect.y1, rect.w, rect.h)
-
-        gc.fill = Color(0.5, 0.7, 0.7, 0.5)
-        gc.fillRect(rect.x1, rect.y1, rect.w, rect.h)
-    }
-}
