@@ -5,9 +5,9 @@ import javafx.scene.image.Image
 import rb.owl.bindable.Bindable
 import rb.owl.bindableMList.BindableMList
 import rb.owl.bindableMList.IBindableMList
+import rb.vectrix.intersect.CollisionObject
 import rb.vectrix.mathUtil.MathUtil
 import rb.vectrix.mathUtil.d
-import rb.vectrix.mathUtil.i
 import rb.vectrix.shapes.RectI
 
 interface IAafProject {
@@ -50,19 +50,37 @@ class AafAnimation(
 {
     override fun toString() = name
 
-    fun getDraws(frame: Int) : List<DrawContract>{
-        val met = MathUtil.cycle(0, frames.size, frame)
-        return frames[met]
+    val x1 = frames.asSequence()
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX - frame.ox} }
+        .min()
+    val y1 = frames.asSequence()
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY - frame.oy } }
+        .min()
+    val x2 = frames.asSequence()
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX + celset.cels[it.celId].wi - frame.ox } }
+        .max()
+    val y2 = frames.asSequence()
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY + celset.cels[it.celId].hi - frame.oy } }
+        .max()
+
+    fun getFrame(met: Int) =  frames[MathUtil.cycle(0, frames.size, met)]
+
+    fun getDraws(met: Int) : List<DrawContract>{
+        val frame = getFrame(met)
+        return frame
             .chunks
-            .map { DrawContract(celset.image, celset.cels[it.celId], it.offsetX.d, it.offsetY.d) }
+            .map { DrawContract(celset.image, celset.cels[it.celId], it.offsetX.d - frame.ox, it.offsetY.d  - frame.oy) }
     }
 }
+
 class AafFrame(
     val chunks: List<AafChunk>,
-    var ox: Double = 0.0,
-    var oy: Double = 0.0
+    var ox: Int = 0,
+    var oy: Int = 0,
+    val hboxes: MutableList<AafHitbox> = mutableListOf())
+{
+}
 
-)
 class AafChunk(
     val celId: Int,
     val offsetX: Short,
@@ -72,3 +90,7 @@ class AafChunk(
 class CelSet(val image: Image, val cels: List<RectI>, val name: String) {
     override fun toString() = name
 }
+
+class AafHitbox(
+    var typeId: Short,
+    var col: CollisionObject)
