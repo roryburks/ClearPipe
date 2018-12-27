@@ -10,7 +10,7 @@ import clearpipe.model.master.Commands.OpenCommand
 import clearpipe.ui.mainViews.ManyFramesView
 import clearpipe.ui.mainViews.center.AnimDisplayView
 import clearpipe.ui.mainViews.center.DisplayCelSpaceView
-import clearpipe.ui.mainViews.center.HitboxView
+import clearpipe.ui.mainViews.center.hitbox.HitboxView
 import javafx.scene.control.TabPane
 import javafx.scene.paint.Color
 import tornadofx.*

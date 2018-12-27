@@ -23,7 +23,10 @@ fun CollisionObject.draw(gc: GraphicsContext){
             gc.strokePolygon(xs, ys, xs.size)
         }
         is CollisionParabola -> {}
-        is CollisionCircle -> {}
-        is CollisionLineSegment -> {}
+        is CollisionCircle -> {
+            gc.fillOval(circle.x - circle.r, circle.y - circle.r, circle.r*2, circle.r*2)
+            gc.strokeOval(circle.x - circle.r, circle.y - circle.r, circle.r*2, circle.r*2)
+        }
+        is CollisionLineSegment -> lineSegment.run { gc.strokeLine(x1, y1, x2, y2) }
     }
 }

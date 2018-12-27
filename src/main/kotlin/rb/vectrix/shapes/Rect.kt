@@ -68,7 +68,7 @@ data class RectD(
 
     companion object {
         fun FromEndpoints( x1: Double, y1: Double, x2: Double, y2: Double)
-            = RectD(min(x1, x2), min(y1,y1), abs(x1-x2), abs(y2-y1))
+            = RectD(min(x1, x2), min(y1,y2), abs(x1-x2), abs(y2-y1))
 
         fun FromPoints( xs : Sequence<Double>, ys: Sequence<Double>) : RectD
         {
