@@ -56,7 +56,7 @@ class RootView  : View() {
                 hgrow = Priority.ALWAYS
             }
             vgrow = Priority.ALWAYS
-            style { backgroundColor += Color.BLACK }
+            style { backgroundColor += Color.DIMGRAY }
             add(manyFramesView.also {
                 hgrow = Priority.SOMETIMES
             })

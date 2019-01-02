@@ -22,9 +22,12 @@ class BuildingRectangleBehavior : IDrawnHitboxPennerBehavior {
         val frame = penner.animation?.getFrame(penner.met) ?: return
         val uid = (frame.hboxes.asSequence().map { it.typeId }.max()?:0) + 1
 
-        val hitbox = AafHitbox(uid.s,CollisionRigidRect(RectD.FromEndpoints(startX,startY,penner.x,penner.y)))
-        frame.hboxes.add(hitbox)
-        penner.selectedBox = hitbox
+        if( startX != penner.x && startY != penner.y) {
+            val hitbox = AafHitbox(uid.s, CollisionRigidRect(RectD.FromEndpoints(startX, startY, penner.x, penner.y)))
+            frame.hboxes.add(hitbox)
+            penner.selectedBox = hitbox
+            penner.trigger()
+        }
     }
 
     override fun draw(penner: HitboxPenner, gc: GraphicsContext) {

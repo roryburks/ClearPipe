@@ -12,7 +12,10 @@ import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
 import rb.extendo.delegates.OnChangeDelegate
+import rb.jvm.javafx.selectedBind
 import rb.jvm.javafx.valueBind
+import rb.owl.Observable
+import rb.owl.addObserver
 import rb.owl.bindable.addObserver
 import rb.vectrix.mathUtil.MathUtil
 import rb.vectrix.mathUtil.d
@@ -20,25 +23,45 @@ import rb.vectrix.mathUtil.floor
 import rb.vectrix.mathUtil.i
 import tornadofx.*
 
+typealias HitboxTrigger = ()->Unit
 
 class HitboxView(val master: IMasterControl) : View() {
-    val toolset = HitboxToolset()
-    val penner : IHitboxPenner = HitboxPenner(toolset)
 
-    val drawView = HitboxDrawView(penner)
+    // Components
+    val hitboxObservavle = Observable<HitboxTrigger>()
+    val toolset = HitboxToolset()
+    val penner : IHitboxPenner = HitboxPenner(toolset, hitboxObservavle)
+
+    // UI
+    val drawView = HitboxDrawView(penner, hitboxObservavle)
+    val btnCopy = button("Copy to All")
+
     val sliderFrame = slider()
     val btnLeft = button("<")
     val btnRight = button(">")
+    val listView = HitboxListView()
+    val propertyView = HitboxPropertyView(hitboxObservavle)
 
 
-    val frameBind = sliderFrame.valueBind()
-    var frame get() = frameBind.field
-        set(value) {frameBind.field = MathUtil.cycle(sliderFrame.min, sliderFrame.max, value)}
+    val metBind = sliderFrame.valueBind()
+    var met get() = metBind.field
+        set(value) {metBind.field = MathUtil.cycle(sliderFrame.min, sliderFrame.max, value)}
 
     override val root: Parent = vbox {
-        add(drawView)
+        spacing = 2.0
+        hbox {
+            add(drawView)
+            vbox {
+                add(listView)
+                add(propertyView)
+            }
+        }
 
-        add(HitboxToolsetView(toolset))
+        hbox {
+            spacing = 5.0
+            add(HitboxToolsetView(toolset))
+            add(btnCopy)
+        }
 
         hbox {
             add(btnLeft)
@@ -46,11 +69,36 @@ class HitboxView(val master: IMasterControl) : View() {
             add(btnRight)
         }
     }
-    init /* Bindings */ {
-        btnLeft.setOnAction { frame -= 1.0 }
-        btnRight.setOnAction { frame += 1.0 }
 
-        frameBind.addObserver { new, old -> drawView.met = new.floor ; penner.met = new.floor }
+    val curAnim get() = drawView.anim
+    val curFrame get() = drawView.anim?.getFrame(drawView.met)
+
+    init /* Bindings */ {
+        btnLeft.setOnAction { met -= 1.0 }
+        btnRight.setOnAction { met += 1.0 }
+        btnCopy.setOnAction {evt->
+            val cframe = curFrame ?: return@setOnAction
+            val anim = curAnim ?: return@setOnAction
+
+            anim.frames
+                .filter { it != cframe }
+                .forEach { frame ->
+                    frame.hboxes.clear()
+                    frame.hboxes.addAll(cframe.hboxes.map { it.copy() })
+                }
+        }
+
+        metBind.addObserver { new, old ->
+            drawView.met = new.floor
+            penner.met = new.floor
+            listView.frame = drawView.anim?.getFrame(new.floor)
+        }
+
+        hitboxObservavle.addObserver { listView.rebuild() }
+
+        listView.listView.selectedBind().bindTo(penner.selectedBoxBind)
+        penner.selectedBoxBind.addObserver { _, _ -> drawView.redraw()}
+        propertyView.hitboxBind.bindTo(penner.selectedBoxBind)
     }
 
     private val _currAnumK = master.obs.currentAnimation.addObserver { new, _ ->
@@ -58,6 +106,7 @@ class HitboxView(val master: IMasterControl) : View() {
         sliderFrame.max = new?.frames?.count()?.d ?: 1.0
         drawView.anim = new
         penner.animation = new
+        listView.frame = drawView.anim?.getFrame(0)
     }
 }
 
@@ -93,7 +142,11 @@ private val colorMap = mapOf(
     2 to Color.GRAY,
     3 to Color.CADETBLUE)
 
-class HitboxDrawView(val penner: IHitboxPenner) : View() {
+class HitboxDrawView(
+    val penner: IHitboxPenner,
+    val hitboxObservable: Observable<HitboxTrigger>)
+    : View()
+{
     var anim by OnChangeDelegate<AafAnimation?>(null) { recalcShift(it); redraw() }
     var met: Int by OnChangeDelegate(0){redraw()}
     val canvas = canvas(500.0,500.0) {}
@@ -127,23 +180,23 @@ class HitboxDrawView(val penner: IHitboxPenner) : View() {
                     val anim = anim ?: return@setOnKeyPressed
                     val frame = anim.getFrame(met)
                     frame.hboxes.remove(penner.selectedBox)
-                    redraw()
+                    hitboxObservable.trigger {it()}
                 }
                 KeyCode.UP -> if( it.isControlDown && it.isShiftDown) {
                     penner.selectedBox?.run { col = col.shift(0.0, -1.0)}
-                    redraw()
+                    hitboxObservable.trigger {it()}
                 }
                 KeyCode.DOWN -> if( it.isControlDown && it.isShiftDown) {
                     penner.selectedBox?.run { col = col.shift(0.0, 1.0)}
-                    redraw()
+                    hitboxObservable.trigger {it()}
                 }
                 KeyCode.LEFT -> if( it.isControlDown && it.isShiftDown) {
                     penner.selectedBox?.run { col = col.shift(-1.0, 0.0)}
-                    redraw()
+                    hitboxObservable.trigger {it()}
                 }
                 KeyCode.RIGHT -> if( it.isControlDown && it.isShiftDown) {
                     penner.selectedBox?.run { col = col.shift(1.0, 0.0)}
-                    redraw()
+                    hitboxObservable.trigger {it()}
                 }
             }
         }

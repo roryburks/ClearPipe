@@ -73,7 +73,8 @@ class AafAnimation(
     }
 }
 
-class AafFrame(
+class AafFrame
+constructor(
     val chunks: List<AafChunk>,
     var ox: Int = 0,
     var oy: Int = 0,
@@ -91,6 +92,6 @@ class CelSet(val image: Image, val cels: List<RectI>, val name: String) {
     override fun toString() = name
 }
 
-class AafHitbox(
+data class AafHitbox(
     var typeId: Short,
     var col: CollisionObject)

@@ -27,3 +27,5 @@ class Observable<T> : IObservable<T>
         override fun void() {observers.remove(this)}
     }
 }
+
+fun <T> Observable<T>.addObserver(trigger: T) : IContract = this.addObserver(trigger.observer())

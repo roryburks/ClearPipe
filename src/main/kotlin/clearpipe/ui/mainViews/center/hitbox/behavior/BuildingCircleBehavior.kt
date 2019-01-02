@@ -26,9 +26,12 @@ class BuildingCircleBehavior : IDrawnHitboxPennerBehavior {
         val dist = MathUtil.distance(startX, startY, penner.x, penner.y)
         val uid = (frame.hboxes.asSequence().map { it.typeId }.max()?:0) + 1
 
-        val hitbox = AafHitbox(uid.s,CollisionCircle(CircleD.Make(startX, startY, dist)))
-        frame.hboxes.add(hitbox)
-        penner.selectedBox = hitbox
+        if( dist >= 1) {
+            val hitbox = AafHitbox(uid.s, CollisionCircle(CircleD.Make(startX, startY, dist)))
+            frame.hboxes.add(hitbox)
+            penner.selectedBox = hitbox
+            penner.trigger()
+        }
     }
 
     override fun draw(penner: HitboxPenner, gc: GraphicsContext) {
