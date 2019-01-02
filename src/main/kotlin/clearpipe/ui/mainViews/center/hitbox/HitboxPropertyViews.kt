@@ -1,6 +1,7 @@
 package clearpipe.ui.mainViews.center.hitbox
 
 import clearpipe.model.imageData.AafHitbox
+import javafx.scene.Node
 import javafx.scene.Parent
 import rb.owl.Observable
 import rb.owl.bindable.Bindable
@@ -16,15 +17,17 @@ import tornadofx.*
 object HitboxPropertyViewFactory
 {
     fun buildView(hitbox : AafHitbox?, hitboxObservable: Observable<HitboxTrigger>) : View? {
-        return when( val col = hitbox?.col) {
-            is CollisionRigidRect -> RectView(hitbox, hitboxObservable, col.rect)
-            is CollisionCircle -> CircleView(hitbox, hitboxObservable, col.circle)
-            else -> null
+        val mod = when( val col = hitbox?.col){
+            is CollisionRigidRect -> RectView(col.rect)
+            is CollisionCircle -> CircleView(col.circle)
+            else -> return null
         }
+
+        return BaseView(hitbox, hitboxObservable, mod).also { mod.base = it }
     }
 }
 
-class HitboxPropertyView(val hitboxObservable: Observable<HitboxTrigger>) : View() {
+class HitboxPropertyView(private val hitboxObservable: Observable<HitboxTrigger>) : View() {
     val hitboxBind = Bindable<AafHitbox?>(null)
 
     override val root = hbox {  }
@@ -37,7 +40,42 @@ class HitboxPropertyView(val hitboxObservable: Observable<HitboxTrigger>) : View
     }
 }
 
-private class CircleView( val hitbox: AafHitbox, val hitboxObservable: Observable<HitboxTrigger>, circle: Circle) : View() {
+private class BaseView(
+    val hitbox: AafHitbox,
+    val hitboxObservable: Observable<HitboxTrigger>,
+    val modView: ModView)
+    : View()
+{
+    val tfTypeId = textfield(hitbox.typeId.toString())
+
+    override val root: Parent = vbox {
+        spacing = 1.0
+        hbox {
+            spacing = 3.0
+            label("TypeId: ")
+            add(tfTypeId)
+        }
+        add(modView)
+        hbox {
+            button("Apply") {
+                action {
+                    hitbox.typeId = tfTypeId.text.toShort()
+                    modView.onApply()
+                    hitboxObservable.trigger { it()}
+                }
+            }
+        }
+    }
+}
+
+private abstract class ModView : View() {
+    lateinit var base: BaseView
+    abstract fun onApply()
+}
+
+private class CircleView(circle: Circle)
+    : ModView()
+{
     val xtf = textfield(circle.x.toString())
     val ytf = textfield(circle.y.toString())
     val rtf = textfield(circle.r.toString())
@@ -55,25 +93,24 @@ private class CircleView( val hitbox: AafHitbox, val hitboxObservable: Observabl
             label("r")
             add(rtf)
         }
-        hbox {
-            button("Apply") {
-                action {
-                    hitbox.col = CollisionCircle(CircleD.Make(
-                        xtf.text.toDouble(),
-                        ytf.text.toDouble(),
-                        rtf.text.toDouble()))
-                    hitboxObservable.trigger { it()}
-                }
-            }
-        }
+    }
+
+    override fun onApply() {
+        base.hitbox.col = CollisionCircle(CircleD.Make(
+            xtf.text.toDouble(),
+            ytf.text.toDouble(),
+            rtf.text.toDouble()))
     }
 }
 
-private class RectView(val hitbox: AafHitbox, val hitboxObservable: Observable<HitboxTrigger>, rect: Rect) : View() {
+private class RectView(rect: Rect)
+    : ModView()
+{
     val xtf = textfield(rect.x1.toString())
     val ytf = textfield(rect.y1.toString())
     val wtf = textfield(rect.w.toString())
     val htf = textfield(rect.h.toString())
+
     override val root = vbox {
         spacing = 1.0
         hbox {
@@ -90,17 +127,13 @@ private class RectView(val hitbox: AafHitbox, val hitboxObservable: Observable<H
             label("h")
             add(htf)
         }
-        hbox {
-            button("Apply") {
-                action {
-                    hitbox.col = CollisionRigidRect(RectD(
-                        xtf.text.toDouble(),
-                        ytf.text.toDouble(),
-                        wtf.text.toDouble(),
-                        htf.text.toDouble()))
-                    hitboxObservable.trigger { it()}
-                }
-            }
-        }
+    }
+
+    override fun onApply() {
+        base.hitbox.col = CollisionRigidRect(RectD(
+            xtf.text.toDouble(),
+            ytf.text.toDouble(),
+            wtf.text.toDouble(),
+            htf.text.toDouble()))
     }
 }
