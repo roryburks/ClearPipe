@@ -37,3 +37,16 @@ object ImportCommand : ICommand{
         return true
     }
 }
+
+
+object SaveCommand : ICommand {
+    override val name: String get() = "Save"
+    override fun execute(master: IMasterControl, obj: Any?): Boolean {
+        val workspace = obj as? IAafProject ?: master.projectSet.current ?: return false
+        val toSave = master.dialog.promptForSave("Save Aaf File") ?: return true
+
+        return true
+    }
+
+
+}

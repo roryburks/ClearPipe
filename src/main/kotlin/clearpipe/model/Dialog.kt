@@ -7,6 +7,7 @@ import java.io.File
 
 interface IDialog {
     fun promptForOpen(message: String) : File?
+    fun promptForSave(message: String) : File?
     fun promptForString(message: String, default: String) : String?
 }
 
@@ -21,6 +22,12 @@ class Dialog() : IDialog {
             result.isPresent -> result.get()
             else -> null
         }
+    }
+
+    override fun promptForSave(message: String): File? {
+        val fc = FileChooser()
+        fc.title = message
+        return fc.showSaveDialog(stage)
     }
 
     override fun promptForOpen(message: String): File? {

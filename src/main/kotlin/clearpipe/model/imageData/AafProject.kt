@@ -24,7 +24,11 @@ interface IAafProject {
     fun import( animations: List<AafAnimation>, celset: CelSet)
 }
 
-class AafProject : IAafProject {
+interface MAafProject : IAafProject {
+    override val celSets : MutableList<CelSet>
+}
+
+class AafProject : MAafProject {
     override val animationsBind = BindableMList<AafAnimation>()
     override val animations get() = animationsBind.list
     override val currentAnimationBind = Bindable<AafAnimation?>(null)
@@ -46,7 +50,7 @@ class AafProject : IAafProject {
 class AafAnimation(
     var name: String,
     val frames: List<AafFrame>,
-    val celset: CelSet)
+    var celset: CelSet)
 {
     override fun toString() = name
 
@@ -83,7 +87,7 @@ constructor(
 }
 
 class AafChunk(
-    val celId: Int,
+    var celId: Int,
     val offsetX: Short,
     val offsetY: Short,
     val drawDepth: Int)

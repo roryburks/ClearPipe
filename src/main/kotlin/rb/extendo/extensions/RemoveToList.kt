@@ -24,3 +24,13 @@ fun <T> MutableIterable<T>.removeFirst(filter: (T) -> Boolean) : T? {
     }
     return null
 }
+
+fun <T> MutableIterable<T>.pop() : T? {
+    val iter = iterator()
+    if( iter.hasNext()) {
+        val t = iter.next()
+        iter.remove()
+        return t
+    }
+    return null
+}

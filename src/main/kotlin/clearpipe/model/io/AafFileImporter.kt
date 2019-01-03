@@ -17,7 +17,7 @@ interface IAafFileImporter {
 
 object AafFileImporter : IAafFileImporter {
     override fun import(file: File) : AafPair {
-        val (pngFile, aafFile) = getFiles(file)
+        val (pngFile, aafFile) = getAafFiles(file)
 
         val img = Image(pngFile.toURI().toString())
         val aaf = AafFileLoader.loadFile(aafFile)
@@ -25,13 +25,5 @@ object AafFileImporter : IAafFileImporter {
         val celSet = CelSet(img, aaf.celRects, pngFile.nameWithoutExtension)
 
         return AafPair(celSet, aaf.animations.map { AafAnimation(it.name, it.frames, celSet) })
-    }
-
-    fun getFiles(file: File) : Pair<File,File> {
-        val filename = file.absolutePath
-        return when(val ext = file.extension.toLowerCase()) {
-            "png" -> Pair(file, File(filename.substring(0, filename.length-3)+"aaf"))
-            else -> Pair(File(filename.substring(0, filename.length - ext.length) + "png"), file)
-        }
     }
 }
