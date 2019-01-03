@@ -20,6 +20,9 @@ import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 import javax.imageio.ImageIO
+import javafx.scene.SnapshotParameters
+import javafx.scene.paint.Color
+
 
 object AafFileExporter {
     fun exportFile(project: MAafProject, file: File) {
@@ -37,11 +40,12 @@ object AafFileExporter {
         aafFile.createNewFile()
 
         val ra = RandomAccessFile(aafFile, "rw")
+        AafWriter.write(ra, project)
     }
 }
 object AafWriter {
     fun write(ra: RandomAccessFile, project: IAafProject) {
-        ra.writeInt(2)  // [4]: Header
+        ra.writeInt(3)  // [4]: Header
 
         ra.writeShort(project.animations.size)  // [2] : NumAnims
         for (anim in project.animations) {
@@ -55,6 +59,7 @@ object AafWriter {
                     ra.writeShort(chunk.celId)  // [2] : CelId
                     ra.writeShort(chunk.offsetX.i)   // [2]
                     ra.writeShort(chunk.offsetY.i)   // [2]
+                    ra.writeInt(chunk.drawDepth)    // [4]
                 }
                 ra.writeByte(frame.hboxes.size) // [1]
                 frame.hboxes.forEach { HitboxWriter.write(ra, it) } // [n]
@@ -131,6 +136,7 @@ object CelsetCompressor {
 
         val canvas = Canvas(packed.width.d, packed.height.d)
         val gc = canvas.graphicsContext2D
+        gc.clearRect(0.0,0.0,packed.width.d, packed.height.d)
 
         cels.map { Pair(it,it) }.toMap()
 
@@ -145,7 +151,7 @@ object CelsetCompressor {
             map[floatingCel] = index
         }
 
-        val img = canvas.snapshot(null, null)
+        val img = canvas.snapshot(SnapshotParameters().also { it.fill = Color.TRANSPARENT }, null)
         val newCelSet = CelSet(img, packed.packedRects, name)
         return Pair(newCelSet, remapping.nest(map))
     }

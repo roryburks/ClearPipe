@@ -3,6 +3,7 @@ package clearpipe.model.master
 import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.imageData.CelSet
 import clearpipe.model.imageData.IAafProject
+import clearpipe.model.imageData.MAafProject
 import rb.owl.IContract
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.IBindObserver
@@ -12,7 +13,7 @@ import rb.owl.bindableMList.*
 import kotlin.contracts.contract
 
 interface ICentralObservatory {
-    val currentAafProject : Bindable<IAafProject?>
+    val currentAafProject : Bindable<MAafProject?>
 
     val celSet: IBindableMList<CelSet>
     val currentCel: IBindable<CelSet?>
@@ -22,7 +23,7 @@ interface ICentralObservatory {
 }
 
 class CentralObservatory(val master: MasterControl) : ICentralObservatory{
-    override val currentAafProject: Bindable<IAafProject?> get() = master.projectSet.currentBind
+    override val currentAafProject: Bindable<MAafProject?> get() = master.projectSet.currentBind
 
     override val celSet: IBindableMList<CelSet> = TrackingListBinder { it.celSetsBind }
     override val currentCel: IBindable<CelSet?> = TrackingBinder { it.selectedCelBind }

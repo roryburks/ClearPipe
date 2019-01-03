@@ -43,14 +43,14 @@ object AafFileLoader : IAafFileLoader {
     private fun v3Loader(ra: RandomAccessFile) : AafFile {
 
         // Animations
-        val numAnims = ra.readShort()
-        val anims = List(numAnims.i) {
+        val numAnims = ra.readUnsignedShort()
+        val anims = List(numAnims) {
             val animName = ra.readUTF8nt()
             val numFrames = ra.readUnsignedShort()
             val frames = List(numFrames) {
                 val ox = ra.readShort()
                 val oy = ra.readShort()
-                val numChunks = ra.readUnsignedShort()
+                val numChunks = ra.readUnsignedByte()
                 val chunks = List(numChunks) {
                     AafChunk(
                         celId = ra.readUnsignedShort(),

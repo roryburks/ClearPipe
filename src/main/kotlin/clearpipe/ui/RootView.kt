@@ -7,6 +7,7 @@ import clearpipe.model.master.IMasterControl
 import clearpipe.model.master.MasterControl
 import clearpipe.model.master.Commands.ImportCommand
 import clearpipe.model.master.Commands.OpenCommand
+import clearpipe.model.master.Commands.SaveCommand
 import clearpipe.ui.mainViews.ManyFramesView
 import clearpipe.ui.mainViews.center.AnimDisplayView
 import clearpipe.ui.mainViews.center.DisplayCelSpaceView
@@ -33,6 +34,7 @@ class RootView  : View() {
             menu("File") {
                 item("Open", "Shortcut+O").action { OpenCommand.execute(master, null)}
                 item("Import", "Shortcut+I").action { ImportCommand.execute(master, null)}
+                item("Save", "Shortcut+S").action { SaveCommand.execute(master, null)}
             }
         }
         hbox {

@@ -1,0 +1,64 @@
+CWA File:
+Version 0003
+
+An extension of the AAF file to include certain game-related properties.
+
+[4, uint] : Version Number (3)
+[2, ushort] : Num Animations
+  : Per Animation
+    [n, UTF8] : Name of Animation
+    [2, ushort] : Number  of Frame
+      : Per Frame
+      	[2, short] OriginX
+      	[2, short] OriginY
+        [1, ubyte] : Number of Chunk
+          : Per Chunk
+            [2, ushort] CelId
+            [2, short] OffsetX
+            [2, short] OffsetY
+            [4, int] DrawDepth
+        [1, ubyte] : Number of Hit/Hurtboxes
+          : Per Box
+            [1, ubyte] : Box TypeId (to be interpretted by the engine)
+            [1, ubyte] : Collision Kind
+            [n] : Collision Data (see CollisionKinds)
+[2] : Number of Cels
+  : Per Cel
+    [8] : (x,y,w,h), each UShort : Cel's Rectangle
+
+
+CollisionKinds:
+0: Point
+	[4, float] X
+	[4, float] Y
+1: RigidRect
+	[4, float] X
+	[4, float] Y
+	[4, float] W
+	[4, float] H
+2: Circle
+	[4, float] X
+	[4, float] Y
+	[4, float] R
+3: Arc
+	[4, float] X
+	[4, float] Y
+	[4, float] R
+	[4, float] thStart
+	[4, float] thEnd
+4: LineSeg
+	[4, float] X1
+	[4, float] Y1
+	[4, float] X2
+	[4, float] Y2
+5: RayRect
+	[4, float] X
+	[4, float] Y
+	[4, float] H
+	[4, float] LEN
+	[4, float] TH
+6: Poly
+	[2, ushort] NumPoints
+	  : Per Point
+	    [4, float] X
+	    [4, float] Y

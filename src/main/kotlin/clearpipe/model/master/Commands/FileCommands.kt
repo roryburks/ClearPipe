@@ -2,8 +2,11 @@ package clearpipe.model.master.Commands
 
 import clearpipe.model.imageData.AafProject
 import clearpipe.model.imageData.IAafProject
+import clearpipe.model.imageData.MAafProject
+import clearpipe.model.io.AafFileExporter
 import clearpipe.model.io.AafFileImporter
 import clearpipe.model.master.IMasterControl
+import java.io.File
 
 interface ICommand {
     fun execute(master: IMasterControl, obj: Any?) : Boolean
@@ -42,9 +45,12 @@ object ImportCommand : ICommand{
 object SaveCommand : ICommand {
     override val name: String get() = "Save"
     override fun execute(master: IMasterControl, obj: Any?): Boolean {
-        val workspace = obj as? IAafProject ?: master.projectSet.current ?: return false
-        val toSave = master.dialog.promptForSave("Save Aaf File") ?: return true
-
+        val workspace = obj as? MAafProject ?: master.projectSet.current ?: return false
+        var toSave = master.dialog.promptForSave("Save Aaf File") ?: return true
+        if( toSave.extension == "" ) {
+            toSave = File(toSave.absolutePath + ".aaf")
+        }
+        AafFileExporter.exportFile(workspace, toSave)
         return true
     }
 
