@@ -28,7 +28,7 @@ class BuildingCircleBehavior : IDrawnHitboxPennerBehavior {
 
         if( dist >= 1) {
             val hitbox = AafHitbox(uid.s, CollisionCircle(CircleD.Make(startX, startY, dist)))
-            frame.hboxes.add(hitbox)
+            frame.addHBox(hitbox)
             penner.selectedBox = hitbox
             penner.trigger()
         }

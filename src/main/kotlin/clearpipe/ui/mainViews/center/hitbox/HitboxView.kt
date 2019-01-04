@@ -83,8 +83,8 @@ class HitboxView(val master: IMasterControl) : View() {
             anim.frames
                 .filter { it != cframe }
                 .forEach { frame ->
-                    frame.hboxes.clear()
-                    frame.hboxes.addAll(cframe.hboxes.map { it.copy() })
+                    frame.clearHBoxes()
+                    frame.addHBoxes(cframe.hboxes.map { it.copy() })
                 }
         }
 
@@ -179,7 +179,7 @@ class HitboxDrawView(
                 KeyCode.DELETE -> {
                     val anim = anim ?: return@setOnKeyPressed
                     val frame = anim.getFrame(met)
-                    frame.hboxes.remove(penner.selectedBox)
+                    penner.selectedBox?.also { frame.removeHBox(it)}
                     hitboxObservable.trigger {it()}
                 }
                 KeyCode.UP -> if( it.isControlDown && it.isShiftDown) {

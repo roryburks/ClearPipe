@@ -50,21 +50,23 @@ class AafProject : MAafProject {
 class AafAnimation(
     var name: String,
     val frames: List<AafFrame>,
-    var celset: CelSet)
+    var celset: CelSet,
+    var ox: Int = 0,
+    var oy: Int = 0)
 {
     override fun toString() = name
 
     val x1 = frames.asSequence()
-        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX - frame.ox} }
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX - ox} }
         .min()
     val y1 = frames.asSequence()
-        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY - frame.oy } }
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY - oy } }
         .min()
     val x2 = frames.asSequence()
-        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX + celset.cels[it.celId].wi - frame.ox } }
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX + celset.cels[it.celId].wi - ox } }
         .max()
     val y2 = frames.asSequence()
-        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY + celset.cels[it.celId].hi - frame.oy } }
+        .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY + celset.cels[it.celId].hi - oy } }
         .max()
 
     fun getFrame(met: Int) =  frames[MathUtil.cycle(0, frames.size, met)]
@@ -73,17 +75,35 @@ class AafAnimation(
         val frame = getFrame(met)
         return frame
             .chunks
-            .map { DrawContract(celset.image, celset.cels[it.celId], it.offsetX.d - frame.ox, it.offsetY.d  - frame.oy) }
+            .map { DrawContract(celset.image, celset.cels[it.celId], it.offsetX.d - ox, it.offsetY.d  - oy) }
     }
 }
 
 class AafFrame
 constructor(
     val chunks: List<AafChunk>,
-    var ox: Int = 0,
-    var oy: Int = 0,
-    val hboxes: MutableList<AafHitbox> = mutableListOf())
+    hboxes: List<AafHitbox> = listOf())
 {
+    private val _hboxes : MutableList<AafHitbox>
+    val hboxes : List<AafHitbox> get() = _hboxes
+
+    init {
+        _hboxes = hboxes.toMutableList()
+        _hboxes.forEach { it.context = this }
+    }
+
+    fun addHBox(hitbox: AafHitbox) {
+        _hboxes.add(hitbox)
+        hitbox.context = this
+    }
+    fun addHBoxes(hitbox: Collection<AafHitbox>) {
+        _hboxes.addAll(hitbox)
+        hitbox.forEach { it.context = this }
+    }
+    fun removeHBox(hitbox: AafHitbox) {
+        _hboxes.remove(hitbox)
+    }
+    fun clearHBoxes() = _hboxes.clear()
 }
 
 class AafChunk(
@@ -96,6 +116,10 @@ class CelSet(val image: Image, val cels: List<RectI>, val name: String) {
     override fun toString() = name
 }
 
-data class AafHitbox(
+data class AafHitbox
+    constructor(
     var typeId: Short,
     var col: CollisionObject)
+{
+    lateinit var context: AafFrame
+}

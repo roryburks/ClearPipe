@@ -64,9 +64,6 @@ private class AnimDrawView() : View() {
     val canvas = canvas(500.0,500.0) {
     }
 
-    var ox = 0
-    var oy = 0
-
     override val root= scrollpane {
         add(canvas)
         canvas.hgrow = Priority.ALWAYS
@@ -75,13 +72,13 @@ private class AnimDrawView() : View() {
         vgrow = Priority.ALWAYS
 
         canvas.setOnMousePressed {
-            ox = it.x.round
-            oy = it.y.round
+            anim?.ox = it.x.round
+            anim?.oy = it.y.round
             redraw()
         }
         canvas.setOnMouseDragged {
-            ox = it.x.round
-            oy = it.y.round
+            anim?.ox = it.x.round
+            anim?.oy = it.y.round
             redraw()
         }
     }
@@ -91,6 +88,8 @@ private class AnimDrawView() : View() {
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
 
         val anim = anim ?: return
+        val ox = anim.ox
+        val oy = anim.oy
         anim.getDraws(frame).forEach {
             gc.drawImage(it.image,
                 it.area.x1, it.area.y1, it.area.w, it.area.h,

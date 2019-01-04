@@ -24,7 +24,7 @@ class BuildingRectangleBehavior : IDrawnHitboxPennerBehavior {
 
         if( startX != penner.x && startY != penner.y) {
             val hitbox = AafHitbox(uid.s, CollisionRigidRect(RectD.FromEndpoints(startX, startY, penner.x, penner.y)))
-            frame.hboxes.add(hitbox)
+            frame.addHBox(hitbox)
             penner.selectedBox = hitbox
             penner.trigger()
         }

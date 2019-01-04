@@ -50,10 +50,10 @@ object AafWriter {
         ra.writeShort(project.animations.size)  // [2] : NumAnims
         for (anim in project.animations) {
             ra.writeUTF8nt(anim.name)   // [n] : AnimName
+            ra.writeShort(anim.ox) // [2] : OriginX
+            ra.writeShort(anim.oy) // [2] : OriginY
             ra.writeShort(anim.frames.size) // [2] : Num Frames
             for(frame in anim.frames) {
-                ra.writeShort(frame.ox) // [2] : OriginX
-                ra.writeShort(frame.oy) // [2] : OriginY
                 ra.writeByte(frame.chunks.size) // [1] : Num chunks
                 for( chunk in frame.chunks) {
                     ra.writeShort(chunk.celId)  // [2] : CelId

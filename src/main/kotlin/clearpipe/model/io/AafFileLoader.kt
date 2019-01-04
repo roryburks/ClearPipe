@@ -15,7 +15,7 @@ import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 
-data class FileAafAnim(val name: String, val frames: List<AafFrame>)
+data class FileAafAnim(val name: String, val frames: List<AafFrame>, val ox : Int = 0, val oy: Int = 0)
 
 class AafFile(
     val animations: List<FileAafAnim>,
@@ -46,10 +46,10 @@ object AafFileLoader : IAafFileLoader {
         val numAnims = ra.readUnsignedShort()
         val anims = List(numAnims) {
             val animName = ra.readUTF8nt()
+            val ox = ra.readShort()
+            val oy = ra.readShort()
             val numFrames = ra.readUnsignedShort()
             val frames = List(numFrames) {
-                val ox = ra.readShort()
-                val oy = ra.readShort()
                 val numChunks = ra.readUnsignedByte()
                 val chunks = List(numChunks) {
                     AafChunk(
@@ -63,9 +63,9 @@ object AafFileLoader : IAafFileLoader {
                     val typeId = ra.readUnsignedByte().s
                     AafHitbox(typeId, loadHitbox(ra))
                 }
-                AafFrame(chunks, ox.i, oy.i, hitbox)
+                AafFrame(chunks, hitbox)
             }
-            FileAafAnim(animName, frames)
+            FileAafAnim(animName, frames, ox.i, oy.i)
         }
 
         // Cels

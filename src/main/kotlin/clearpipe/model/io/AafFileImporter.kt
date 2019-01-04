@@ -24,6 +24,6 @@ object AafFileImporter : IAafFileImporter {
 
         val celSet = CelSet(img, aaf.celRects, pngFile.nameWithoutExtension)
 
-        return AafPair(celSet, aaf.animations.map { AafAnimation(it.name, it.frames, celSet) })
+        return AafPair(celSet, aaf.animations.map { AafAnimation(it.name, it.frames, celSet, it.ox, it.oy) })
     }
 }

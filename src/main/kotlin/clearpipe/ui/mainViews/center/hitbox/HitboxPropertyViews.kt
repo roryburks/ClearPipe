@@ -1,6 +1,8 @@
 package clearpipe.ui.mainViews.center.hitbox
 
+import clearpipe.model.imageData.AafFrame
 import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.imageData.IAafAnimation
 import javafx.scene.Node
 import javafx.scene.Parent
 import rb.owl.Observable
@@ -61,6 +63,12 @@ private class BaseView(
                 action {
                     hitbox.typeId = tfTypeId.text.toShort()
                     modView.onApply()
+                    hitboxObservable.trigger { it()}
+                }
+            }
+            button("Delete") {
+                action {
+                    hitbox.context.removeHBox(hitbox)
                     hitboxObservable.trigger { it()}
                 }
             }
