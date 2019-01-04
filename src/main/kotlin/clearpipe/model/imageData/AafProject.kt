@@ -56,16 +56,16 @@ class AafAnimation(
 {
     override fun toString() = name
 
-    val x1 = frames.asSequence()
+    val x1 get() = frames.asSequence()
         .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX - ox} }
         .min()
-    val y1 = frames.asSequence()
+    val y1 get() = frames.asSequence()
         .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY - oy } }
         .min()
-    val x2 = frames.asSequence()
+    val x2 get() = frames.asSequence()
         .flatMap { frame -> frame.chunks.asSequence().map { it.offsetX + celset.cels[it.celId].wi - ox } }
         .max()
-    val y2 = frames.asSequence()
+    val y2 get() = frames.asSequence()
         .flatMap { frame -> frame.chunks.asSequence().map { it.offsetY + celset.cels[it.celId].hi - oy } }
         .max()
 

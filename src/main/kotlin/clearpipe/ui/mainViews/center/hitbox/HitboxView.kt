@@ -157,19 +157,19 @@ class HitboxDrawView(
     init {
         canvas.setOnMousePressed {
             canvas.requestFocus()
-            penner.mouseDown(it.x - shiftX, it.y - shiftY, it.isShiftDown, it.isControlDown)
+            penner.mouseDown(it.x + shiftX, it.y + shiftY, it.isShiftDown, it.isControlDown)
             if( penner.isDrawn)
                 redraw()
         }
         canvas.setOnMouseDragged {
             canvas.requestFocus()
-            penner.mouseDrag(it.x - shiftX, it.y - shiftY, it.isShiftDown, it.isControlDown)
+            penner.mouseDrag(it.x + shiftX, it.y + shiftY, it.isShiftDown, it.isControlDown)
             if( penner.isDrawn)
                 redraw()
         }
         canvas.setOnMouseReleased {
             canvas.requestFocus()
-            penner.mouseUp(it.x - shiftX, it.y - shiftY, it.isShiftDown, it.isControlDown)
+            penner.mouseUp(it.x + shiftX, it.y + shiftY, it.isShiftDown, it.isControlDown)
             redraw()
         }
 
@@ -211,15 +211,16 @@ class HitboxDrawView(
     }
 
     fun recalcShift(animation: AafAnimation?) {
-        shiftX = -(animation?.x1 ?: 0)
-        shiftY = -(animation?.y1 ?: 0)
+        shiftX = animation?.x1 ?: 0
+        shiftY = animation?.y1 ?: 0
     }
 
     fun redraw() {
         val gc = canvas.graphicsContext2D
+        recalcShift(anim)
         //gc.save()
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
-        gc.transform = Affine.affine(1.0,0.0,0.0,1.0,shiftX.d, shiftY.d)
+        gc.transform = Affine.affine(1.0,0.0,0.0,1.0,-shiftX.d, -shiftY.d)
 
         val anim = anim ?: return
         anim.getDraws(met).forEach {

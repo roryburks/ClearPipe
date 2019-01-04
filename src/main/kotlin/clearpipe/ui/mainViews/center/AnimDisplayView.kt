@@ -93,7 +93,7 @@ private class AnimDrawView() : View() {
         anim.getDraws(frame).forEach {
             gc.drawImage(it.image,
                 it.area.x1, it.area.y1, it.area.w, it.area.h,
-                it.offsetX, it.offsetY, it.area.w, it.area.h)
+                it.offsetX + ox, it.offsetY + oy, it.area.w, it.area.h)
         }
 
         gc.stroke = Color(0.1, 0.3, 0.1, 0.7)
