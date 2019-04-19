@@ -6,6 +6,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import rb.extendo.dataStructures.SinglyList
 import rb.extendo.delegates.OnChangeDelegate
+import rb.jvm.javafx.intBind
+import rb.owl.bindable.Bindable
 import rb.owl.bindable.addObserver
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.floor
@@ -14,9 +16,14 @@ import tornadofx.*
 import java.util.*
 
 class AnimDisplayView(val master: IMasterControl) : View() {
+    val controller = AnimDrawView.AnimDisplayController(master)
     private val draw = AnimDrawView(master)
+
+    // region UI
     val animLabel = label()
-    val fpsTextField = textfield("8")
+    val tfFps = textfield("8")
+    val tfOx = textfield("0")
+    val tfOy = textfield("0")
     override val root = vbox {
         add(draw)
         hbox {
@@ -24,19 +31,25 @@ class AnimDisplayView(val master: IMasterControl) : View() {
                 setOnAction { play = this.isSelected }
             }
             add(animLabel)
-            add(fpsTextField)
+            add(tfFps)
+            add(label("OX"))
+            add(tfOx)
+            add(label("OY"))
+            add(tfOy)
 
         }
     }
+    // endregion
 
     init {
-        master.obs.currentAnimation.addObserver { new, old ->
-            draw.anim = new
-            animLabel.text = new?.name ?: ""
+        controller.animBind.addObserver { new, _ -> animLabel.text = new?.name ?: "" }
+        tfFps.textProperty().addListener { _, _, newValue ->
+            controller.fps = newValue.toDoubleOrNull() ?: controller.fps
         }
-        fpsTextField.textProperty().addListener { observable, oldValue, newValue ->
-            fps = newValue.toDoubleOrNull() ?: fps
-        }
+
+        tfOx.intBind().bindTo(controller.oxBind)
+        tfOy.intBind().bindTo(controller.oyBind)
+
     }
 
     init {
@@ -44,26 +57,51 @@ class AnimDisplayView(val master: IMasterControl) : View() {
         t.scheduleAtFixedRate(object : TimerTask(){
             override fun run() {
                 if( play)
-                    met += fps / 50.0
+                    controller
+                    controller.met += controller.fps / 50.0
             }
         }, 0, 20)
     }
 
     var play = false
-    var fps: Double = 8.0
-    var met: Double = 0.0
-        set(value) {
-            field = value
-            draw.frame = value.floor
-        }
 }
 
 private class AnimDrawView(private val master: IMasterControl) : View() {
     var anim by OnChangeDelegate<AafAnimation?>(null) { redraw()}
     var frame: Int by OnChangeDelegate(0){redraw()}
+class AnimDisplayController( val master: IMasterControl) : Controller()
+{
+    var oxBind = Bindable(0)
+    var oyBind = Bindable(0)
+    var animBind = master.obs.currentAnimation
+    var metBind = Bindable(0.0)
 
-    val canvas = canvas(500.0,500.0) {
+    var ox by oxBind
+    var oy by oyBind
+    val anim get() = animBind.field
+    var met by metBind
+    var fps = 8.0
+
+    init {
+        animBind.addObserver { new, _ ->
+            ox = new?.ox ?: 0
+            oy = new?.oy ?: 0
+        }
+        oxBind.addObserver { new, _ -> anim?.ox = new }
+        oyBind.addObserver { new, _ -> anim?.oy = new }
     }
+}
+
+private class AnimDrawView(val controller: AnimDisplayController) : View() {
+    init {
+        controller.animBind.addObserver { _, _ -> redraw() }
+        controller.oxBind.addObserver { _, _ -> redraw() }
+        controller.oyBind.addObserver { _, _ -> redraw() }
+        controller.metBind.addObserver { new, _ -> localMet = new.floor }
+    }
+
+    var localMet by OnChangeDelegate(0) {redraw()}
+    val canvas = canvas(500.0,500.0) {}
 
     override val root= scrollpane {
         add(canvas)
@@ -87,6 +125,8 @@ private class AnimDrawView(private val master: IMasterControl) : View() {
         canvas.setOnMouseDragged {
             setOrig(it.x.round, it.y.round,it.isAltDown && it.isShiftDown)
             redraw()
+            controller.ox = it.x.round
+            controller.oy = it.y.round
         }
     }
 
@@ -94,10 +134,10 @@ private class AnimDrawView(private val master: IMasterControl) : View() {
         val gc = canvas.graphicsContext2D
         gc.clearRect(0.0, 0.0, canvas.width, canvas.height)
 
-        val anim = anim ?: return
-        val ox = anim.ox
-        val oy = anim.oy
-        anim.getDraws(frame).forEach {
+        val anim = controller.anim ?: return
+        val ox = controller.ox
+        val oy = controller.oy
+        anim.getDraws(localMet).forEach {
             gc.drawImage(it.image,
                 it.area.x1, it.area.y1, it.area.w, it.area.h,
                 it.offsetX + ox, it.offsetY + oy, it.area.w, it.area.h)
