@@ -53,6 +53,7 @@ class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
         super.updateItem(item, empty)
     }
     init {
+        isEditable = true
         setOnDragDetected {evt ->
             val aaf  = aaf ?: return@setOnDragDetected
             val db = startDragAndDrop(TransferMode.COPY)
