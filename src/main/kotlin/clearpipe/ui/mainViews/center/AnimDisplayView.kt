@@ -4,6 +4,7 @@ import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.master.IMasterControl
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
+import rb.extendo.dataStructures.SinglyList
 import rb.extendo.delegates.OnChangeDelegate
 import rb.owl.bindable.addObserver
 import rb.vectrix.mathUtil.d
@@ -13,7 +14,7 @@ import tornadofx.*
 import java.util.*
 
 class AnimDisplayView(val master: IMasterControl) : View() {
-    private val draw = AnimDrawView()
+    private val draw = AnimDrawView(master)
     val animLabel = label()
     val fpsTextField = textfield("8")
     override val root = vbox {
@@ -57,7 +58,7 @@ class AnimDisplayView(val master: IMasterControl) : View() {
         }
 }
 
-private class AnimDrawView() : View() {
+private class AnimDrawView(private val master: IMasterControl) : View() {
     var anim by OnChangeDelegate<AafAnimation?>(null) { redraw()}
     var frame: Int by OnChangeDelegate(0){redraw()}
 
@@ -71,14 +72,20 @@ private class AnimDrawView() : View() {
         hgrow = Priority.ALWAYS
         vgrow = Priority.ALWAYS
 
+        fun setOrig(x: Int, y: Int, many: Boolean) {
+            if( many)
+                master.projectSet.current?.animations?.forEach {it.ox = x ; it.oy = y}
+            else
+                anim?.ox = x ; anim?.oy = y
+
+        }
+
         canvas.setOnMousePressed {
-            anim?.ox = it.x.round
-            anim?.oy = it.y.round
+            setOrig(it.x.round, it.y.round,it.isAltDown && it.isShiftDown)
             redraw()
         }
         canvas.setOnMouseDragged {
-            anim?.ox = it.x.round
-            anim?.oy = it.y.round
+            setOrig(it.x.round, it.y.round,it.isAltDown && it.isShiftDown)
             redraw()
         }
     }

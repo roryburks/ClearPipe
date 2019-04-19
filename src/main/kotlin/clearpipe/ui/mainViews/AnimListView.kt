@@ -7,6 +7,7 @@ import javafx.collections.FXCollections
 import javafx.scene.control.ListCell
 import javafx.scene.input.ClipboardContent
 import javafx.scene.input.KeyCode
+import javafx.scene.input.MouseButton
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
@@ -53,7 +54,18 @@ class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
         super.updateItem(item, empty)
     }
     init {
-        isEditable = true
+        setOnMousePressed { evt ->
+            if( evt.button == MouseButton.SECONDARY) {
+                aaf?.also {
+                    master.dialog.promptForString("Rename Animation", it.name)?.also { str ->
+                        it.name = str
+                        // TODO: replace with proper bindings
+                        updateItem(it, false)
+                    }
+                }
+                evt.consume()
+            }
+        }
         setOnDragDetected {evt ->
             val aaf  = aaf ?: return@setOnDragDetected
             val db = startDragAndDrop(TransferMode.COPY)
@@ -65,10 +77,11 @@ class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
             evt.consume()
         }
 
-        setOnKeyPressed {
-            if( it.code == KeyCode.F2) {
+        setOnKeyPressed { evt ->
+            println("x")
+            if( evt.code == KeyCode.F2) {
 
-                it.consume()
+                evt.consume()
             }
         }
     }
