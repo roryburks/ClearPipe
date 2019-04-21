@@ -16,8 +16,8 @@ import tornadofx.*
 import java.util.*
 
 class AnimDisplayView(val master: IMasterControl) : View() {
-    val controller = AnimDrawView.AnimDisplayController(master)
-    private val draw = AnimDrawView(master)
+    private val controller = AnimDisplayController(master)
+    private val draw = AnimDrawView(master, controller)
 
     // region UI
     val animLabel = label()
@@ -66,9 +66,6 @@ class AnimDisplayView(val master: IMasterControl) : View() {
     var play = false
 }
 
-private class AnimDrawView(private val master: IMasterControl) : View() {
-    var anim by OnChangeDelegate<AafAnimation?>(null) { redraw()}
-    var frame: Int by OnChangeDelegate(0){redraw()}
 class AnimDisplayController( val master: IMasterControl) : Controller()
 {
     var oxBind = Bindable(0)
@@ -92,7 +89,9 @@ class AnimDisplayController( val master: IMasterControl) : Controller()
     }
 }
 
-private class AnimDrawView(val controller: AnimDisplayController) : View() {
+private class AnimDrawView(
+    val master: IMasterControl,
+    val controller: AnimDisplayController) : View() {
     init {
         controller.animBind.addObserver { _, _ -> redraw() }
         controller.oxBind.addObserver { _, _ -> redraw() }
@@ -114,7 +113,7 @@ private class AnimDrawView(val controller: AnimDisplayController) : View() {
             if( many)
                 master.projectSet.current?.animations?.forEach {it.ox = x ; it.oy = y}
             else
-                anim?.ox = x ; anim?.oy = y
+                controller.anim?.also {  it.ox = x ; it.oy = y }
 
         }
 
