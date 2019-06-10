@@ -7,8 +7,6 @@ import clearpipe.model.imageData.MAafProject
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.canvas.Canvas
 import rb.extendo.extensions.*
-import rb.vectrix.calculate.ModifiedSleatorAlgorithm
-import rb.vectrix.calculate.PackedRectangle
 import rb.vectrix.intersect.CollisionCircle
 import rb.vectrix.intersect.CollisionPoint
 import rb.vectrix.intersect.CollisionRigidRect
@@ -22,6 +20,8 @@ import java.io.RandomAccessFile
 import javax.imageio.ImageIO
 import javafx.scene.SnapshotParameters
 import javafx.scene.paint.Color
+import rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
+import rb.vectrix.rectanglePacking.PackedRectangle
 
 
 object AafFileExporter {
@@ -131,7 +131,7 @@ object CelsetCompressor {
         val celSet: CelSet,
         val region: RectI)
 
-    private fun drawAndMap( packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<CelSet,Map<Pair<CelSet,Int>,Int>> {
+    private fun drawAndMap(packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<CelSet,Map<Pair<CelSet,Int>,Int>> {
         val dimToCelset = cels.toLookup { Vec2i(it.region.wi, it.region.hi) }
 
         val canvas = Canvas(packed.width.d, packed.height.d)

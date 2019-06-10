@@ -1,21 +1,12 @@
-package rb.vectrix.calculate
+package rb.vectrix.rectanglePacking
 
 import rb.extendo.extensions.removeFirst
 import rb.extendo.extensions.removeToList
 import rb.vectrix.linear.Vec2i
-import rb.vectrix.shapes.Rect
 import rb.vectrix.shapes.RectI
 import kotlin.math.max
 import kotlin.math.min
 
-
-data class PackedRectangle (
-    val packedRects : List<RectI>
-){
-    val width: Int = packedRects.map{ it.x1i + it.wi}.max() ?: 0
-    val height: Int = packedRects.map{ it.y1i + it.hi}.max() ?: 0
-}
-private val NilPacked get() = PackedRectangle(emptyList())
 
 fun ModifiedSleatorAlgorithm(toPack: List<Vec2i>) : PackedRectangle {
     val cropped = toPack.filter { it.xi > 0 && it.yi > 0 }.sortedBy { -it.xi }

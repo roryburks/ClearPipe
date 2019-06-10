@@ -1,0 +1,26 @@
+ClearWater Zone Map File
+
+Transition Areas:
+[n : Collision Object]
+[n : UTF] ZoneId of the zone that the transition area goes to
+
+Cel Sets:
+[2: UShort] Number of Celsets
+Per Set:
+    [n: Utf8] Name
+    [2: UShort] Number of Cels
+        Per Cel:
+        [2: UShort]x8 : Rects of Cels
+
+Collision Set:
+[4: Int] Number of Collision Objects
+Per Collision Object
+    [1: Byte] Type
+    [n: Collision]
+
+Tile Set:
+[4: Int] Number of Tiles
+Per Tile Object
+    [2: Cell Id]
+    [4: Int] x
+    [4: Int] y
