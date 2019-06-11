@@ -8,8 +8,6 @@ import javafx.scene.paint.Color
 import rb.extendo.extensions.nest
 import rb.extendo.extensions.pop
 import rb.extendo.extensions.toLookup
-import rb.vectrix.calculate.ModifiedSleatorAlgorithm
-import rb.vectrix.calculate.PackedRectangle
 import rb.vectrix.intersect.CollisionCircle
 import rb.vectrix.intersect.CollisionPoint
 import rb.vectrix.intersect.CollisionRigidRect
@@ -17,6 +15,8 @@ import rb.vectrix.linear.Vec2i
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.f
 import rb.vectrix.mathUtil.i
+import rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
+import rb.vectrix.rectanglePacking.PackedRectangle
 import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
@@ -128,9 +128,10 @@ object CelsetCompressor {
 
     private data class FloatingCel(
         val celSet: CelSet,
-        val region: RectI)
+        val region: RectI
+    )
 
-    private fun drawAndMap( packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<CelSet,Map<Pair<CelSet,Int>,Int>> {
+    private fun drawAndMap(packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<CelSet,Map<Pair<CelSet,Int>,Int>> {
         val dimToCelset = cels.toLookup { Vec2i(it.region.wi, it.region.hi) }
 
         val canvas = Canvas(packed.width.d, packed.height.d)
