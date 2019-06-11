@@ -1,12 +1,13 @@
 package clearpipe.model.io
 
-import clearpipe.model.imageData.AafHitbox
-import clearpipe.model.imageData.CelSet
-import clearpipe.model.imageData.IAafProject
-import clearpipe.model.imageData.MAafProject
+import clearpipe.model.imageData.*
 import javafx.embed.swing.SwingFXUtils
+import javafx.scene.SnapshotParameters
 import javafx.scene.canvas.Canvas
-import rb.extendo.extensions.*
+import javafx.scene.paint.Color
+import rb.extendo.extensions.nest
+import rb.extendo.extensions.pop
+import rb.extendo.extensions.toLookup
 import rb.vectrix.intersect.CollisionCircle
 import rb.vectrix.intersect.CollisionPoint
 import rb.vectrix.intersect.CollisionRigidRect
@@ -14,14 +15,12 @@ import rb.vectrix.linear.Vec2i
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.f
 import rb.vectrix.mathUtil.i
+import rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
+import rb.vectrix.rectanglePacking.PackedRectangle
 import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 import javax.imageio.ImageIO
-import javafx.scene.SnapshotParameters
-import javafx.scene.paint.Color
-import rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
-import rb.vectrix.rectanglePacking.PackedRectangle
 
 
 object AafFileExporter {
@@ -108,7 +107,7 @@ object AafWriter {
 private typealias CelId = Pair<CelSet,Int>
 object CelsetCompressor {
     fun compressCelsets(project: MAafProject, name: String) {
-        val (cels, remapping) = getDeduplicatedCelsets(project.celSets)
+        val (cels, remapping) = getUsedNonDuplicateCells(project.animations)
 
         val packedRect = ModifiedSleatorAlgorithm(cels.map { Vec2i(it.region.wi, it.region.hi) })
 
@@ -129,7 +128,8 @@ object CelsetCompressor {
 
     private data class FloatingCel(
         val celSet: CelSet,
-        val region: RectI)
+        val region: RectI
+    )
 
     private fun drawAndMap(packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<CelSet,Map<Pair<CelSet,Int>,Int>> {
         val dimToCelset = cels.toLookup { Vec2i(it.region.wi, it.region.hi) }
@@ -156,12 +156,19 @@ object CelsetCompressor {
         return Pair(newCelSet, remapping.nest(map))
     }
 
-    private fun getDeduplicatedCelsets(original : List<CelSet>) : Pair<List<FloatingCel>,Map<CelId,FloatingCel>> {
+    private fun getUsedNonDuplicateCells(anims: Iterable<AafAnimation>)
+            : Pair<List<FloatingCel>,Map<CelId,FloatingCel>>
+    {
         // Todo: make this actually deduplicate
         val map = mutableMapOf<CelId,FloatingCel>()
-        val floatingCels = original.flatMap { celset ->
-            celset.cels.mapIndexed { index, region ->
-                FloatingCel(celset, region).also { map[CelId(celset,index)] = it } } }
-        return Pair(floatingCels, map)
+        val usedCels = anims.asSequence().flatMap { anim ->
+            anim.frames.asSequence().flatMap{ frame -> frame.chunks.asSequence().map { CelId(anim.celset, it.celId) } }
+        }.distinct()
+
+        val floatingCels = usedCels.map {
+                FloatingCel(it.first,it.first.cels[it.second])
+                    .also { cel -> map[it] = cel } }
+
+        return Pair(floatingCels.toList(), map)
     }
 }

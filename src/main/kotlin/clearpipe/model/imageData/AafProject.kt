@@ -2,6 +2,7 @@ package clearpipe.model.imageData
 
 import clearpipe.model.DrawContract
 import javafx.scene.image.Image
+import rb.extendo.extensions.toHashMap
 import rb.owl.bindable.Bindable
 import rb.owl.bindableMList.BindableMList
 import rb.owl.bindableMList.IBindableMList
@@ -40,6 +41,18 @@ class AafProject : MAafProject {
     override var selectedCel: CelSet? by selectedCelBind
 
     override fun import(animations: List<AafAnimation>, celset: CelSet) {
+        val nameMap = animations.toHashMap({it.name}, {it})
+
+        this.animations
+            .removeAll {
+                val mapped = nameMap[it.name] ?: return@removeAll false
+                println("removingL ${it.name}")
+                mapped.ox = it.ox
+                mapped.oy = it.oy
+                mapped.frames.zip(it.frames).forEach { (new,old) ->new.addHBoxes(old.hboxes)}
+                true
+            }
+
         this.animations.addAll(animations)
         celSets.add(celset)
         selectedCel = selectedCel ?: celset

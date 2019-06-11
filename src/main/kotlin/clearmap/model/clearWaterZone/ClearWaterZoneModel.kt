@@ -1,6 +1,5 @@
 package clearmap.model.clearWaterZone
 
-import rb.extendo.delegates.OnChangeDelegate
 import rb.owl.bindableMList.BindableMListSet
 import rb.vectrix.shapes.RectI
 import java.awt.Image

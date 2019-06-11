@@ -2,7 +2,10 @@ package clearmap.ui.views
 
 import javafx.scene.Parent
 import javafx.scene.control.TabPane
-import tornadofx.*
+import tornadofx.View
+import tornadofx.hbox
+import tornadofx.tab
+import tornadofx.tabpane
 
 
 class ClearMapRootView  : View() {
