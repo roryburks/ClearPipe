@@ -1,7 +1,7 @@
-package rb.owl.jvm
+package rb.jvm
 
 import rb.extendo.extensions.mapRemoveIfNull
-import rb.owl.IContract
+import rb.IContract
 import rb.owl.IObservable
 import rb.owl.IObserver
 import rb.owl.bindable.Bindable
@@ -18,9 +18,11 @@ class WeakObserver<T>(trigger: T) : IObserver<T>
 }
 
 /** Note: the contract strongly references the Trigger, so the trigger is preserved as long as the contract is. */
-fun <T> IBindable<T>.addWeakObserver(t: (new: T, old: T)->Unit) : IContract = WeakObserverContract(this.addObserver(WeakObserver(t)),t)
+fun <T> IBindable<T>.addWeakObserver(t: (new: T, old: T)->Unit) : IContract = WeakObserverContract(this.addObserver(
+    WeakObserver(t)
+),t)
 
-private class WeakObserverContract<T>( private val bindContract: IContract, val t: T) : IContract {
+private class WeakObserverContract<T>(private val bindContract: IContract, val t: T) : IContract {
     override fun void() {bindContract.void()}
 }
 
@@ -41,7 +43,7 @@ class WeakBindable<T>(default: T) : IObservable<OnChangeEvent<T>>
         }
     }
     
-    private inner class ObserverContract(val observer: IBindObserver<T>) : IContract{
+    private inner class ObserverContract(val observer: IBindObserver<T>) : IContract {
         init {observers.add(observer)}
         override fun void() {observers.remove(observer)}
     }

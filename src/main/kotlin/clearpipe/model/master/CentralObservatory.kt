@@ -4,13 +4,12 @@ import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.imageData.CelSet
 import clearpipe.model.imageData.IAafProject
 import clearpipe.model.imageData.MAafProject
-import rb.owl.IContract
+import rb.IContract
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.IBindObserver
 import rb.owl.bindable.IBindable
 import rb.owl.bindable.addObserver
 import rb.owl.bindableMList.*
-import kotlin.contracts.contract
 
 interface ICentralObservatory {
     val currentAafProject : Bindable<MAafProject?>
@@ -41,7 +40,7 @@ class CentralObservatory(val master: MasterControl) : ICentralObservatory{
         override fun addObserver(observer: IBindObserver<T?>, trigger: Boolean): IContract = Contracter(observer)
 
         private val binds = mutableListOf<Contracter>()
-        private inner class Contracter(val observer: IBindObserver<T?>) : IContract{
+        private inner class Contracter(val observer: IBindObserver<T?>) : IContract {
             init {binds.add(this)}
             override fun void() {binds.remove(this)}
         }
@@ -84,7 +83,7 @@ class CentralObservatory(val master: MasterControl) : ICentralObservatory{
         override fun addObserver(observer: IMutableListObserver<T>, trigger: Boolean): IContract = Contracter(observer)
 
         private val binds = mutableListOf<Contracter>()
-        private inner class Contracter(val observer: IMutableListObserver<T>) : IContract{
+        private inner class Contracter(val observer: IMutableListObserver<T>) : IContract {
             init {binds.add(this)}
             override fun void() {binds.remove(this)}
         }

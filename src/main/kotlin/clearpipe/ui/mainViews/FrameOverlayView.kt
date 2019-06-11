@@ -12,9 +12,7 @@ import javafx.scene.transform.Affine
 import javafx.scene.transform.Scale
 import rb.extendo.delegates.OnChangeDelegate
 import rb.owl.bindable.Bindable
-import rb.owl.bindable.OnChangeEvent
-import rb.owl.bindable.addObserver
-import rb.owl.jvm.addWeakObserver
+import rb.jvm.addWeakObserver
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.floor
 import tornadofx.*

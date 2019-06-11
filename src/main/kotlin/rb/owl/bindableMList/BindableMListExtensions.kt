@@ -1,7 +1,5 @@
 package rb.owl.bindableMList
 
-import rb.owl.IContract
-
 fun <T> IBindableMList<T>.onRemove(lambda: (removed: Collection<T>)->Unit) = addObserver(
             object : IListTriggers<T> {
                 override fun elementsAdded(index: Int, elements: Collection<T>) {}

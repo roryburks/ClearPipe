@@ -1,6 +1,6 @@
 package rb.owl.interprettedBindings
 
-import rb.owl.IContract
+import rb.IContract
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.addObserver
 import rb.vectrix.linear.Vec2f

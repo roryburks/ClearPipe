@@ -12,7 +12,7 @@ import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.util.Callback
-import rb.owl.jvm.addWeakObserver
+import rb.jvm.addWeakObserver
 import rb.owl.jvm.javafx.bindTo
 import tornadofx.*
 

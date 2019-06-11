@@ -6,7 +6,7 @@ import javafx.collections.FXCollections
 import javafx.scene.Parent
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
-import rb.owl.jvm.addWeakObserver
+import rb.jvm.addWeakObserver
 import rb.owl.jvm.javafx.bindTo
 import tornadofx.*
 
