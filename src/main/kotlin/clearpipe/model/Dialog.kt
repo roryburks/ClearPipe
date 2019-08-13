@@ -29,16 +29,19 @@ class Dialog(private  val settings: ISettingsManager) : IDialog
 
     override fun promptForSave(message: String): File? {
         val fc = FileChooser()
-        println(settings.savePath)
-        fc.initialDirectory = File(settings.savePath)
+        val file = File(settings.savePath)
+        if(file.isDirectory)
+            fc.initialDirectory = file
         fc.title = message
         return fc.showSaveDialog(stage)?.also { settings.savePath = it.parent }
     }
 
     override fun promptForOpen(message: String): File? {
         val fc = FileChooser()
-        println(settings.openPath)
-        fc.initialDirectory = File(settings.openPath)
+
+        val file = File(settings.openPath)
+        if(file.isDirectory)
+            fc.initialDirectory = File(settings.openPath)
         fc.title = message
         return fc.showOpenDialog(stage)?.also { settings.openPath = it.parent }
     }
