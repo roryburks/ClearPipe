@@ -5,7 +5,7 @@ import rb.IContract
 
 
 interface IBindableMList<T> {
-    val list: List<T>
+    val list: MutableList<T>
     fun addObserver( observer: IMutableListObserver<T>, trigger: Boolean = false) : IContract
 }
 

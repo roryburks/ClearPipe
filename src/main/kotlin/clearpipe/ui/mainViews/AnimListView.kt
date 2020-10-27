@@ -56,11 +56,21 @@ class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
     init {
         setOnMousePressed { evt ->
             if( evt.button == MouseButton.SECONDARY) {
-                aaf?.also {
-                    master.dialog.promptForString("Rename Animation", it.name)?.also { str ->
-                        it.name = str
-                        // TODO: replace with proper bindings
-                        updateItem(it, false)
+                if( evt.isShiftDown)
+                {
+                    val curAnim = master.projectSet.current?.currentAnimation
+                    if( curAnim != null)
+                    {
+                        master.projectSet.current?.animationsBind?.list?.remove(curAnim)
+                    }
+                }
+                else {
+                    aaf?.also {
+                        master.dialog.promptForString("Rename Animation", it.name)?.also { str ->
+                            it.name = str
+                            // TODO: replace with proper bindings
+                            updateItem(it, false)
+                        }
                     }
                 }
                 evt.consume()

@@ -67,7 +67,7 @@ class CentralObservatory(val master: MasterControl) : ICentralObservatory{
     }
     private inner class TrackingListBinder<T>(val finder : (IAafProject)->IBindableMList<T>) : IBindableMList<T>
     {
-        override val list get() = currentAafProject.field?.run(finder)?.list ?: emptyList()
+        override val list get() = currentAafProject.field?.run(finder)?.list ?: mutableListOf()
         var currentContract: IContract? = null
 
         val obs = object : IListTriggers<T> {
@@ -91,7 +91,7 @@ class CentralObservatory(val master: MasterControl) : ICentralObservatory{
         init {
             currentAafProject.addObserver(true) { new, old ->
                 currentContract?.void()
-                val oldList = old?.run(finder)?.list ?: emptyList()
+                val oldList = old?.run(finder)?.list ?: mutableListOf()
                 obs.elementsRemoved(oldList)
                 if( new != null) {
                     val newBind = new.run(finder)
