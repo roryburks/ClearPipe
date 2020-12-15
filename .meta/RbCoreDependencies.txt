@@ -1,0 +1,7 @@
+root: ../src/main/kotlin
+
+/rb/animo
+/rb/extendo
+/rb/vectrix
+
+/rbJvm/animo
