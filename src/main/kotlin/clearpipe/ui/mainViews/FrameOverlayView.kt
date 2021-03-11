@@ -10,11 +10,11 @@ import javafx.scene.control.Slider
 import javafx.scene.layout.Priority
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Scale
-import rb.extendo.delegates.OnChangeDelegate
+import old.rb.extendo.delegates.OnChangeDelegate
 import rb.owl.bindable.Bindable
-import rb.jvm.addWeakObserver
-import rb.vectrix.mathUtil.d
-import rb.vectrix.mathUtil.floor
+import old.rbJvm.jvm.addWeakObserver
+import old.rb.vectrix.mathUtil.d
+import old.rb.vectrix.mathUtil.floor
 import tornadofx.*
 import kotlin.math.pow
 

@@ -2,14 +2,14 @@ package clearpipe.model.imageData
 
 import clearpipe.model.DrawContract
 import javafx.scene.image.Image
-import rb.extendo.extensions.toHashMap
+import old.rb.extendo.extensions.toHashMap
 import rb.owl.bindable.Bindable
 import rb.owl.bindableMList.BindableMList
 import rb.owl.bindableMList.IBindableMList
-import rb.vectrix.intersect.CollisionObject
-import rb.vectrix.mathUtil.MathUtil
-import rb.vectrix.mathUtil.d
-import rb.vectrix.shapes.RectI
+import old.rb.vectrix.intersect.CollisionObject
+import old.rb.vectrix.mathUtil.MathUtil
+import old.rb.vectrix.mathUtil.d
+import old.rb.vectrix.shapes.RectI
 
 interface IAafProject {
     val animationsBind: IBindableMList<AafAnimation>

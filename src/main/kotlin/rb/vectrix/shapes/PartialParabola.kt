@@ -1,2 +1,0 @@
-package rb.vectrix.shapes
-

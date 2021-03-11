@@ -1,6 +1,6 @@
 package rb.owl
 
-import rb.IContract
+import old.rb.IContract
 
 
 interface IObserver<T> {

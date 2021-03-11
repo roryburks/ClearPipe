@@ -1,7 +1,7 @@
 package clearmap.model.clearWaterZone
 
 import rb.owl.bindableMList.BindableMListSet
-import rb.vectrix.shapes.RectI
+import old.rb.vectrix.shapes.RectI
 import java.awt.Image
 
 class ClearWaterZoneModel {

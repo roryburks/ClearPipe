@@ -4,7 +4,7 @@ import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.imageData.CelSet
 import clearpipe.model.imageData.IAafProject
 import clearpipe.model.imageData.MAafProject
-import rb.IContract
+import old.rb.IContract
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.IBindObserver
 import rb.owl.bindable.IBindable

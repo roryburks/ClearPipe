@@ -1,17 +1,15 @@
 package clearpipe.ui.mainViews.center
 
-import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.master.IMasterControl
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
-import rb.extendo.dataStructures.SinglyList
-import rb.extendo.delegates.OnChangeDelegate
-import rb.jvm.javafx.intBind
+import old.rb.extendo.delegates.OnChangeDelegate
+import old.rbJvm.jvm.javafx.intBind
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.addObserver
-import rb.vectrix.mathUtil.d
-import rb.vectrix.mathUtil.floor
-import rb.vectrix.mathUtil.round
+import old.rb.vectrix.mathUtil.d
+import old.rb.vectrix.mathUtil.floor
+import old.rb.vectrix.mathUtil.round
 import tornadofx.*
 import java.util.*
 

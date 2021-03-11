@@ -3,12 +3,11 @@ package clearpipe.ui.mainViews.center.hitbox
 import clearpipe.model.imageData.AafFrame
 import clearpipe.model.imageData.AafHitbox
 import javafx.collections.FXCollections
-import javafx.scene.Parent
 import javafx.scene.control.ListCell
 import javafx.util.Callback
-import rb.extendo.delegates.OnChangeDelegate
-import rb.vectrix.intersect.CollisionCircle
-import rb.vectrix.intersect.CollisionRigidRect
+import old.rb.extendo.delegates.OnChangeDelegate
+import old.rb.vectrix.intersect.CollisionCircle
+import old.rb.vectrix.intersect.CollisionRigidRect
 import tornadofx.Controller
 import tornadofx.View
 import tornadofx.listview

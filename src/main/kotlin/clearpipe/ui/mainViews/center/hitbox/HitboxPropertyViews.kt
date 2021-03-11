@@ -1,19 +1,16 @@
 package clearpipe.ui.mainViews.center.hitbox
 
-import clearpipe.model.imageData.AafFrame
 import clearpipe.model.imageData.AafHitbox
-import clearpipe.model.imageData.IAafAnimation
-import javafx.scene.Node
 import javafx.scene.Parent
 import rb.owl.Observable
 import rb.owl.bindable.Bindable
 import rb.owl.bindable.addObserver
-import rb.vectrix.intersect.CollisionCircle
-import rb.vectrix.intersect.CollisionRigidRect
-import rb.vectrix.shapes.Circle
-import rb.vectrix.shapes.CircleD
-import rb.vectrix.shapes.Rect
-import rb.vectrix.shapes.RectD
+import old.rb.vectrix.intersect.CollisionCircle
+import old.rb.vectrix.intersect.CollisionRigidRect
+import old.rb.vectrix.shapes.Circle
+import old.rb.vectrix.shapes.CircleD
+import old.rb.vectrix.shapes.Rect
+import old.rb.vectrix.shapes.RectD
 import tornadofx.*
 
 object HitboxPropertyViewFactory

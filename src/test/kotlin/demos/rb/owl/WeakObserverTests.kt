@@ -4,7 +4,7 @@ import rb.owl.bindable.Bindable
 import rb.owl.bindable.OnChangeEvent
 import rb.owl.bindableMList.BindableMList
 import rb.owl.bindableMList.IListTriggers
-import rb.jvm.WeakObserver
+import old.rbJvm.jvm.WeakObserver
 
 class WeakObserverTests {
     //@Test

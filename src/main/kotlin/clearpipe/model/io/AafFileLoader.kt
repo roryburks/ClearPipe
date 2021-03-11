@@ -1,17 +1,16 @@
 package clearpipe.model.io
 
-import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.imageData.AafChunk
 import clearpipe.model.imageData.AafFrame
 import clearpipe.model.imageData.AafHitbox
-import rb.vectrix.intersect.*
-import rb.vectrix.mathUtil.d
-import rb.vectrix.mathUtil.i
-import rb.vectrix.mathUtil.s
-import rb.vectrix.shapes.CircleD
-import rb.vectrix.shapes.LineSegmentD
-import rb.vectrix.shapes.RectD
-import rb.vectrix.shapes.RectI
+import old.rb.vectrix.intersect.*
+import old.rb.vectrix.mathUtil.d
+import old.rb.vectrix.mathUtil.i
+import old.rb.vectrix.mathUtil.s
+import old.rb.vectrix.shapes.CircleD
+import old.rb.vectrix.shapes.LineSegmentD
+import old.rb.vectrix.shapes.RectD
+import old.rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 

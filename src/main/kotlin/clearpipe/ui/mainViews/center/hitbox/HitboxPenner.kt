@@ -5,11 +5,10 @@ import clearpipe.model.imageData.AafHitbox
 import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingCircleBehavior
 import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingRectangleBehavior
 import javafx.scene.canvas.GraphicsContext
-import rb.extendo.delegates.OnChangeDelegate
-import rb.owl.IObservable
+import old.rb.extendo.delegates.OnChangeDelegate
 import rb.owl.Observable
 import rb.owl.bindable.Bindable
-import rb.vectrix.intersect.CollisionPoint
+import old.rb.vectrix.intersect.CollisionPoint
 
 interface IHitboxPenner
 {
