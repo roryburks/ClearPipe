@@ -69,6 +69,7 @@ constructor(
 
 class AafChunkK(
     var celId: Int,
+    val group: Char,
     val offsetX: Short,
     val offsetY: Short,
     val drawDepth: Int)

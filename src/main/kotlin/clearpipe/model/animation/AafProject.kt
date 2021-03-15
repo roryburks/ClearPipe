@@ -5,6 +5,11 @@ import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindableMList.BindableMList
 import old.rb.owl.bindableMList.IBindableMList
 
+data class AafProjectImportSet(
+    val animations: List<AafAnimationK>,
+    val celset: AafCelSetK )
+
+
 interface IAafProject {
     val animationsBind: IBindableMList<AafAnimationK>
     val animations: List<AafAnimationK>
@@ -16,7 +21,7 @@ interface IAafProject {
     val selectedCelBind : Bindable<AafCelSetK?>
     var selectedCel : AafCelSetK?
 
-    fun import(animations: List<AafAnimationK>, celset: AafCelSetK)
+    fun import(importSet: AafProjectImportSet)
 }
 
 interface MAafProject : IAafProject {
@@ -34,7 +39,9 @@ class AafProject : MAafProject {
     override val selectedCelBind = Bindable<AafCelSetK?>(null)
     override var selectedCel: AafCelSetK? by selectedCelBind
 
-    override fun import(animations: List<AafAnimationK>, celset: AafCelSetK) {
+    override fun import(importSet: AafProjectImportSet) {
+        val animations = importSet.animations
+        val celset = importSet.celset
         val nameMap = animations.toHashMap({it.name}, {it})
 
         this.animations

@@ -55,7 +55,8 @@ object AafFileLoader : IAafFileLoader {
                         celId = ra.readUnsignedShort(),
                         offsetX = ra.readShort(),
                         offsetY = ra.readShort(),
-                        drawDepth = ra.readInt())
+                        drawDepth = ra.readInt(),
+                        group = ' ')
                 }
                 val numHboxes = ra.readUnsignedByte()
                 val hitbox = MutableList(numHboxes) {
@@ -104,7 +105,8 @@ object AafFileLoader : IAafFileLoader {
                         celId = ra.readUnsignedShort(),
                         offsetX = ra.readShort(),
                         offsetY = ra.readShort(),
-                        drawDepth = ra.readInt())
+                        drawDepth = ra.readInt(),
+                        group = ' ')
                 }
                 AafFrameK(chunks)
             }
