@@ -1,6 +1,6 @@
 package clearpipe.ui.mainViews.center.hitbox.behavior
 
-import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.animation.AafHitboxK
 import clearpipe.ui.mainViews.center.hitbox.HitboxPenner
 import clearpipe.ui.mainViews.center.hitbox.IDrawnHitboxPennerBehavior
 import javafx.scene.canvas.GraphicsContext
@@ -25,7 +25,7 @@ class BuildingCircleBehavior : IDrawnHitboxPennerBehavior {
         val uid = (frame.hboxes.asSequence().map { it.typeId }.max()?:0) + 1
 
         if( dist >= 1) {
-            val hitbox = AafHitbox(uid.s, CollisionCircle(CircleD.Make(startX, startY, dist)))
+            val hitbox = AafHitboxK(uid.s, CollisionCircle(CircleD.Make(startX, startY, dist)))
             frame.addHBox(hitbox)
             penner.selectedBox = hitbox
             penner.trigger()

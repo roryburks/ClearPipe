@@ -1,6 +1,6 @@
 package clearpipe.ui.mainViews.center.hitbox
 
-import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.animation.AafHitboxK
 import javafx.scene.Parent
 import rb.owl.Observable
 import old.rb.owl.bindable.Bindable
@@ -15,7 +15,7 @@ import tornadofx.*
 
 object HitboxPropertyViewFactory
 {
-    fun buildView(hitbox : AafHitbox?, hitboxObservable: Observable<HitboxTrigger>) : View? {
+    fun buildView(hitbox : AafHitboxK?, hitboxObservable: Observable<HitboxTrigger>) : View? {
         val mod = when( val col = hitbox?.col){
             is CollisionRigidRect -> RectView(col.rect)
             is CollisionCircle -> CircleView(col.circle)
@@ -27,7 +27,7 @@ object HitboxPropertyViewFactory
 }
 
 class HitboxPropertyView(private val hitboxObservable: Observable<HitboxTrigger>) : View() {
-    val hitboxBind = Bindable<AafHitbox?>(null)
+    val hitboxBind = Bindable<AafHitboxK?>(null)
 
     override val root = hbox {  }
 
@@ -40,7 +40,7 @@ class HitboxPropertyView(private val hitboxObservable: Observable<HitboxTrigger>
 }
 
 private class BaseView(
-    val hitbox: AafHitbox,
+    val hitbox: AafHitboxK,
     val hitboxObservable: Observable<HitboxTrigger>,
     val modView: ModView)
     : View()

@@ -1,7 +1,7 @@
 package clearpipe.ui.mainViews
 
 import clearpipe.model.draw
-import clearpipe.model.imageData.AafAnimation
+import clearpipe.model.animation.AafAnimationK
 import clearpipe.model.master.IMasterControl
 import javafx.geometry.Orientation
 import javafx.scene.Parent
@@ -20,7 +20,7 @@ import kotlin.math.pow
 
 class FrameOverlayView(
     val master: IMasterControl,
-    val anim: AafAnimation)
+    val anim: AafAnimationK)
     : View()
 {
     val frame = FrameCanvas(anim)
@@ -45,7 +45,7 @@ class FrameOverlayView(
     }
 }
 
-class FrameCanvas(val anim: AafAnimation)
+class FrameCanvas(val anim: AafAnimationK)
     : Canvas(200.0,200.0)
 {
     var frame by OnChangeDelegate(0) {redraw()}

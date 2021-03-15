@@ -1,6 +1,5 @@
 package clearpipe.model.master
 
-import clearpipe.model.imageData.AafAnimation
 import javafx.scene.input.DataFormat
 
 interface IDragManager {

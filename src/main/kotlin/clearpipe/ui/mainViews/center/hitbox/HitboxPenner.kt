@@ -1,7 +1,7 @@
 package clearpipe.ui.mainViews.center.hitbox
 
-import clearpipe.model.imageData.AafAnimation
-import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.animation.AafAnimationK
+import clearpipe.model.animation.AafHitboxK
 import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingCircleBehavior
 import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingRectangleBehavior
 import javafx.scene.canvas.GraphicsContext
@@ -12,10 +12,10 @@ import old.rb.vectrix.intersect.CollisionPoint
 
 interface IHitboxPenner
 {
-    var animation : AafAnimation?
+    var animation : AafAnimationK?
     var met: Int
-    val selectedBoxBind : Bindable<AafHitbox?>
-    var selectedBox : AafHitbox?
+    val selectedBoxBind : Bindable<AafHitboxK?>
+    var selectedBox : AafHitboxK?
 
     fun mouseDown(x: Double, y: Double, holdingShift: Boolean, holdingCtrl: Boolean)
     fun mouseUp( x: Double, y: Double, holdingShift: Boolean, holdingCtrl: Boolean)
@@ -33,10 +33,10 @@ class HitboxPenner(
 {
     fun trigger() = hitboxChangeObservable.trigger { it() }
 
-    override val selectedBoxBind = Bindable<AafHitbox?>(null)
+    override val selectedBoxBind = Bindable<AafHitboxK?>(null)
     override var selectedBox by selectedBoxBind
 
-    override var animation by OnChangeDelegate<AafAnimation?>(null) {behavior = null}
+    override var animation by OnChangeDelegate<AafAnimationK?>(null) {behavior = null}
     override var met: Int by OnChangeDelegate(0) {behavior = null}
 
     var x: Double = 0.0
@@ -64,7 +64,7 @@ class HitboxPenner(
         }
     }
 
-    fun getSelected() : AafHitbox? {
+    fun getSelected() : AafHitboxK? {
         val point = CollisionPoint(x,y)
         return animation?.getFrame(met)?.hboxes?.firstOrNull{point.intersects(it.col)}
     }

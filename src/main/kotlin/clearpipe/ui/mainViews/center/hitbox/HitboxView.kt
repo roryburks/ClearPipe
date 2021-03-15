@@ -2,7 +2,7 @@ package clearpipe.ui.mainViews.center.hitbox
 
 import clearpipe.canvasFxDraws.draw
 import clearpipe.canvasFxDraws.shift
-import clearpipe.model.imageData.AafAnimation
+import clearpipe.model.animation.AafAnimationK
 import clearpipe.model.master.IMasterControl
 import javafx.scene.Parent
 import javafx.scene.control.Button
@@ -147,7 +147,7 @@ class HitboxDrawView(
     val hitboxObservable: Observable<HitboxTrigger>)
     : View()
 {
-    var anim by OnChangeDelegate<AafAnimation?>(null) { recalcShift(it); redraw() }
+    var anim by OnChangeDelegate<AafAnimationK?>(null) { recalcShift(it); redraw() }
     var met: Int by OnChangeDelegate(0){redraw()}
     val canvas = canvas(500.0,500.0) {}
 
@@ -210,7 +210,7 @@ class HitboxDrawView(
         vgrow = Priority.ALWAYS
     }
 
-    fun recalcShift(animation: AafAnimation?) {
+    fun recalcShift(animation: AafAnimationK?) {
         shiftX = animation?.x1 ?: 0
         shiftY = animation?.y1 ?: 0
     }

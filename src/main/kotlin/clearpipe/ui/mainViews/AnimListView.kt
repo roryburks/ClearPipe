@@ -1,6 +1,6 @@
 package clearpipe.ui.mainViews
 
-import clearpipe.model.imageData.AafAnimation
+import clearpipe.model.animation.AafAnimationK
 import clearpipe.model.master.IMasterControl
 import clearpipe.ui.dataFormats.Formats
 import javafx.collections.FXCollections
@@ -46,9 +46,9 @@ class AnimListView(master: IMasterControl) : View() {
     }
 }
 
-class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
-    var aaf : AafAnimation? = null
-    override fun updateItem(item: AafAnimation?, empty: Boolean) {
+class AafListCell(val master: IMasterControl) : ListCell<AafAnimationK?>() {
+    var aaf : AafAnimationK? = null
+    override fun updateItem(item: AafAnimationK?, empty: Boolean) {
         text = item?.run { "$name [${celset.name}]"}
         aaf = item
         super.updateItem(item, empty)
@@ -98,5 +98,5 @@ class AafListCell(val master: IMasterControl) : ListCell<AafAnimation?>() {
 }
 
 class AnimListController( master: IMasterControl) : Controller() {
-    val values = FXCollections.observableArrayList<AafAnimation>().also { it.bindTo(master.obs.animations) }
+    val values = FXCollections.observableArrayList<AafAnimationK>().also { it.bindTo(master.obs.animations) }
 }

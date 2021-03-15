@@ -1,9 +1,8 @@
 package clearpipe.ui.mainViews
 
-import clearpipe.model.imageData.AafAnimation
+import clearpipe.model.animation.AafAnimationK
 import clearpipe.model.master.IMasterControl
 import clearpipe.ui.dataFormats.Formats
-import javafx.scene.Parent
 import javafx.scene.input.TransferMode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
@@ -17,7 +16,7 @@ class ManyFramesView(val master: IMasterControl) : View() {
 
     }
 
-    private val aafsLoaded = mutableMapOf<AafAnimation, FrameOverlayView>()
+    private val aafsLoaded = mutableMapOf<AafAnimationK, FrameOverlayView>()
 
     init /*Drag and Drop */ {
         root.setOnDragOver { evt ->
@@ -27,7 +26,7 @@ class ManyFramesView(val master: IMasterControl) : View() {
             }
         }
         root.setOnDragDropped { evt ->
-            val aaf = master.dragManager.drag?.get(Formats.aafAnimFormat) as? AafAnimation ?: return@setOnDragDropped
+            val aaf = master.dragManager.drag?.get(Formats.aafAnimFormat) as? AafAnimationK ?: return@setOnDragDropped
 
             if( !aafsLoaded.containsKey(aaf)) {
                 val frameView = FrameOverlayView(master, aaf)

@@ -1,8 +1,8 @@
-package clearpipe.model.imageData
+package clearpipe.model.animation
 
 import javafx.scene.canvas.GraphicsContext
 
-fun AafAnimation.draw(gc: GraphicsContext, frame: Int)
+fun AafAnimationK.draw(gc: GraphicsContext, frame: Int)
 {
     val draws = this.getDraws(frame)
     val ox = this.frames

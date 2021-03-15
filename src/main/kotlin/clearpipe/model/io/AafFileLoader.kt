@@ -1,8 +1,8 @@
 package clearpipe.model.io
 
-import clearpipe.model.imageData.AafChunk
-import clearpipe.model.imageData.AafFrame
-import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.animation.AafChunkK
+import clearpipe.model.animation.AafFrameK
+import clearpipe.model.animation.AafHitboxK
 import old.rb.vectrix.intersect.*
 import old.rb.vectrix.mathUtil.d
 import old.rb.vectrix.mathUtil.i
@@ -14,7 +14,7 @@ import old.rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 
-data class FileAafAnim(val name: String, val frames: List<AafFrame>, val ox : Int = 0, val oy: Int = 0)
+data class FileAafAnim(val name: String, val frames: List<AafFrameK>, val ox : Int = 0, val oy: Int = 0)
 
 class AafFile(
     val animations: List<FileAafAnim>,
@@ -51,7 +51,7 @@ object AafFileLoader : IAafFileLoader {
             val frames = List(numFrames) {
                 val numChunks = ra.readUnsignedByte()
                 val chunks = List(numChunks) {
-                    AafChunk(
+                    AafChunkK(
                         celId = ra.readUnsignedShort(),
                         offsetX = ra.readShort(),
                         offsetY = ra.readShort(),
@@ -60,9 +60,9 @@ object AafFileLoader : IAafFileLoader {
                 val numHboxes = ra.readUnsignedByte()
                 val hitbox = MutableList(numHboxes) {
                     val typeId = ra.readUnsignedByte().s
-                    AafHitbox(typeId, loadHitbox(ra))
+                    AafHitboxK(typeId, loadHitbox(ra))
                 }
-                AafFrame(chunks, hitbox)
+                AafFrameK(chunks, hitbox)
             }
             FileAafAnim(animName, frames, ox.i, oy.i)
         }
@@ -100,13 +100,13 @@ object AafFileLoader : IAafFileLoader {
             val frames = List(numFrames) {
                 val numChunks = ra.readUnsignedShort()
                 val chunks = List(numChunks) {
-                    AafChunk(
+                    AafChunkK(
                         celId = ra.readUnsignedShort(),
                         offsetX = ra.readShort(),
                         offsetY = ra.readShort(),
                         drawDepth = ra.readInt())
                 }
-                AafFrame(chunks)
+                AafFrameK(chunks)
             }
             FileAafAnim(animName, frames)
         }

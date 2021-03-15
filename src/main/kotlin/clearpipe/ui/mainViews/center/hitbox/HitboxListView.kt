@@ -1,7 +1,7 @@
 package clearpipe.ui.mainViews.center.hitbox
 
-import clearpipe.model.imageData.AafFrame
-import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.animation.AafFrameK
+import clearpipe.model.animation.AafHitboxK
 import javafx.collections.FXCollections
 import javafx.scene.control.ListCell
 import javafx.util.Callback
@@ -17,7 +17,7 @@ class HitboxListView : View()
 {
     val controller = HitboxListController()
     val listView = listview(controller.values)
-    var frame by OnChangeDelegate<AafFrame?>(null) {rebuild()}
+    var frame by OnChangeDelegate<AafFrameK?>(null) {rebuild()}
 
     override val root = vbox {
         add(listView)
@@ -30,8 +30,8 @@ class HitboxListView : View()
     }
 }
 
-class HitboxListCell : ListCell<AafHitbox>() {
-    override fun updateItem(item: AafHitbox?, empty: Boolean) {
+class HitboxListCell : ListCell<AafHitboxK>() {
+    override fun updateItem(item: AafHitboxK?, empty: Boolean) {
         text = when(val col = item?.col) {
             null -> ""
             is CollisionRigidRect -> "Rect Hitbox: ${col.rect}"
@@ -45,5 +45,5 @@ class HitboxListCell : ListCell<AafHitbox>() {
 
 class HitboxListController : Controller()
 {
-    val values = FXCollections.observableArrayList<AafHitbox>()
+    val values = FXCollections.observableArrayList<AafHitboxK>()
 }

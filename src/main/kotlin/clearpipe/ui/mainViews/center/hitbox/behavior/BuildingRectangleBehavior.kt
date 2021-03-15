@@ -1,6 +1,6 @@
 package clearpipe.ui.mainViews.center.hitbox.behavior
 
-import clearpipe.model.imageData.AafHitbox
+import clearpipe.model.animation.AafHitboxK
 import clearpipe.ui.mainViews.center.hitbox.HitboxPenner
 import clearpipe.ui.mainViews.center.hitbox.IDrawnHitboxPennerBehavior
 import javafx.scene.canvas.GraphicsContext
@@ -23,7 +23,7 @@ class BuildingRectangleBehavior : IDrawnHitboxPennerBehavior {
         val uid = (frame.hboxes.asSequence().map { it.typeId }.max()?:0) + 1
 
         if( startX != penner.x && startY != penner.y) {
-            val hitbox = AafHitbox(uid.s, CollisionRigidRect(RectD.FromEndpoints(startX, startY, penner.x, penner.y)))
+            val hitbox = AafHitboxK(uid.s, CollisionRigidRect(RectD.FromEndpoints(startX, startY, penner.x, penner.y)))
             frame.addHBox(hitbox)
             penner.selectedBox = hitbox
             penner.trigger()

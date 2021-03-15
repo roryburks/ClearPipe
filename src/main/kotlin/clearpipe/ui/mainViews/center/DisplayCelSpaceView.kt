@@ -1,7 +1,7 @@
 package clearpipe.ui.mainViews.center
 
 import clearpipe.model.master.IMasterControl
-import clearpipe.model.imageData.CelSet
+import clearpipe.model.animation.AafCelSetK
 import javafx.collections.FXCollections
 import javafx.scene.Parent
 import javafx.scene.layout.Priority
@@ -37,7 +37,7 @@ class DisplayCelSpaceView(private val master: IMasterControl)
 }
 
 class DisplayCelSpaceController(private val master: IMasterControl) : Controller() {
-    val cellListsFX = FXCollections.observableArrayList<CelSet>().also { it.bindTo(master.obs.celSet) }
+    val cellListsFX = FXCollections.observableArrayList<AafCelSetK>().also { it.bindTo(master.obs.celSet) }
 }
 
 
@@ -48,7 +48,7 @@ class DisplayDrawView : View() {
         vgrow = Priority.ALWAYS
     }
 
-    var celSet : CelSet? = null
+    var celSet : AafCelSetK? = null
         set(value) {
             if( field != value) {
                 field = value

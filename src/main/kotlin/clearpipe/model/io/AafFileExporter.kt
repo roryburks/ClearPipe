@@ -1,6 +1,6 @@
 package clearpipe.model.io
 
-import clearpipe.model.imageData.*
+import clearpipe.model.animation.*
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.SnapshotParameters
 import javafx.scene.canvas.Canvas
@@ -77,7 +77,7 @@ object AafWriter {
     }
 
     object HitboxWriter {
-        fun write(ra: RandomAccessFile, hitbox: AafHitbox) {
+        fun write(ra: RandomAccessFile, hitbox: AafHitboxK) {
             ra.writeByte(hitbox.typeId.i)
             when(val col = hitbox.col) {
                 is CollisionPoint -> {
@@ -104,7 +104,7 @@ object AafWriter {
     }
 }
 
-private typealias CelId = Pair<CelSet,Int>
+private typealias CelId = Pair<AafCelSetK,Int>
 object CelsetCompressor {
     fun compressCelsets(project: MAafProject, name: String) {
         val (cels, remapping) = getUsedNonDuplicateCells(project.animations)
@@ -127,11 +127,11 @@ object CelsetCompressor {
     }
 
     private data class FloatingCel(
-        val celSet: CelSet,
+        val celSet: AafCelSetK,
         val region: RectI
     )
 
-    private fun drawAndMap(packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<CelSet,Map<Pair<CelSet,Int>,Int>> {
+    private fun drawAndMap(packed: PackedRectangle, cels : List<FloatingCel>, remapping: Map<CelId,FloatingCel>, name: String) : Pair<AafCelSetK,Map<Pair<AafCelSetK,Int>,Int>> {
         val dimToCelset = cels.toLookup { Vec2i(it.region.wi, it.region.hi) }
 
         val canvas = Canvas(packed.width.d, packed.height.d)
@@ -152,11 +152,11 @@ object CelsetCompressor {
         }
 
         val img = canvas.snapshot(SnapshotParameters().also { it.fill = Color.TRANSPARENT }, null)
-        val newCelSet = CelSet(img, packed.packedRects, name)
+        val newCelSet = AafCelSetK(img, packed.packedRects, name)
         return Pair(newCelSet, remapping.nest(map))
     }
 
-    private fun getUsedNonDuplicateCells(anims: Iterable<AafAnimation>)
+    private fun getUsedNonDuplicateCells(anims: Iterable<AafAnimationK>)
             : Pair<List<FloatingCel>,Map<CelId,FloatingCel>>
     {
         // Todo: make this actually deduplicate

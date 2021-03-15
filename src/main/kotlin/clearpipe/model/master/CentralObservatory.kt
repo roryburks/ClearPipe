@@ -1,9 +1,9 @@
 package clearpipe.model.master
 
-import clearpipe.model.imageData.AafAnimation
-import clearpipe.model.imageData.CelSet
-import clearpipe.model.imageData.IAafProject
-import clearpipe.model.imageData.MAafProject
+import clearpipe.model.animation.AafAnimationK
+import clearpipe.model.animation.AafCelSetK
+import clearpipe.model.animation.IAafProject
+import clearpipe.model.animation.MAafProject
 import old.rb.IContract
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindable.IBindObserver
@@ -14,21 +14,21 @@ import old.rb.owl.bindableMList.*
 interface ICentralObservatory {
     val currentAafProject : Bindable<MAafProject?>
 
-    val celSet: IBindableMList<CelSet>
-    val currentCel: IBindable<CelSet?>
+    val celSet: IBindableMList<AafCelSetK>
+    val currentCel: IBindable<AafCelSetK?>
 
-    val animations: IBindableMList<AafAnimation>
-    val currentAnimation : IBindable<AafAnimation?>
+    val animations: IBindableMList<AafAnimationK>
+    val currentAnimation : IBindable<AafAnimationK?>
 }
 
 class CentralObservatory(val master: MasterControl) : ICentralObservatory{
     override val currentAafProject: Bindable<MAafProject?> get() = master.projectSet.currentBind
 
-    override val celSet: IBindableMList<CelSet> = TrackingListBinder { it.celSetsBind }
-    override val currentCel: IBindable<CelSet?> = TrackingBinder { it.selectedCelBind }
+    override val celSet: IBindableMList<AafCelSetK> = TrackingListBinder { it.celSetsBind }
+    override val currentCel: IBindable<AafCelSetK?> = TrackingBinder { it.selectedCelBind }
 
-    override val animations : IBindableMList<AafAnimation> = TrackingListBinder { it.animationsBind }
-    override val currentAnimation: IBindable<AafAnimation?> = TrackingBinder { it.currentAnimationBind }
+    override val animations : IBindableMList<AafAnimationK> = TrackingListBinder { it.animationsBind }
+    override val currentAnimation: IBindable<AafAnimationK?> = TrackingBinder { it.currentAnimationBind }
 
 
     // region Internal Classes

@@ -2,7 +2,7 @@ package clearpipe.model.master
 
 import clearpipe.model.Dialog
 import clearpipe.model.IDialog
-import clearpipe.model.imageData.MAafProject
+import clearpipe.model.animation.MAafProject
 import clearpipe.model.master.settings.ISettingsManager
 import clearpipe.model.master.settings.JPreferences
 import clearpipe.model.master.settings.SettingsManager

@@ -1,14 +1,14 @@
 package clearpipe.model.io
 
-import clearpipe.model.imageData.AafAnimation
-import clearpipe.model.imageData.CelSet
+import clearpipe.model.animation.AafAnimationK
+import clearpipe.model.animation.AafCelSetK
 import javafx.scene.image.Image
 import java.io.File
 
 
 class AafPair(
-    val celSet: CelSet,
-    val animations: List<AafAnimation>
+    val celSet: AafCelSetK,
+    val animations: List<AafAnimationK>
 )
 
 interface IAafFileImporter {
@@ -22,8 +22,8 @@ object AafFileImporter : IAafFileImporter {
         val img = Image(pngFile.toURI().toString())
         val aaf = AafFileLoader.loadFile(aafFile)
 
-        val celSet = CelSet(img, aaf.celRects, pngFile.nameWithoutExtension)
+        val celSet = AafCelSetK(img, aaf.celRects, pngFile.nameWithoutExtension)
 
-        return AafPair(celSet, aaf.animations.map { AafAnimation(it.name, it.frames, celSet, it.ox, it.oy) })
+        return AafPair(celSet, aaf.animations.map { AafAnimationK(it.name, it.frames, celSet, it.ox, it.oy) })
     }
 }

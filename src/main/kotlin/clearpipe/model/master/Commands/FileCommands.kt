@@ -1,8 +1,8 @@
 package clearpipe.model.master.Commands
 
-import clearpipe.model.imageData.AafProject
-import clearpipe.model.imageData.IAafProject
-import clearpipe.model.imageData.MAafProject
+import clearpipe.model.animation.AafProject
+import clearpipe.model.animation.IAafProject
+import clearpipe.model.animation.MAafProject
 import clearpipe.model.io.AafFileExporter
 import clearpipe.model.io.AafFileImporter
 import clearpipe.model.master.IMasterControl
@@ -17,6 +17,7 @@ object OpenCommand : ICommand{
     override val name: String get() = "Open"
     override fun execute(master: IMasterControl, obj: Any?): Boolean {
         val toOpen = master.dialog.promptForOpen("Open Aaf File") ?: return true
+
         val aaf = AafFileImporter.import(toOpen)
         val project = AafProject()
 
