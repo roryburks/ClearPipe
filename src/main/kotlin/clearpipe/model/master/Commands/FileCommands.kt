@@ -24,19 +24,9 @@ object OpenCommand : ICommand{
         val toOpen = master.dialog.promptForOpen("Open Aaf File") ?: return true
 
         val (pngFile, aafFile) = AafReading.getAafFiles(toOpen)
-        val img = Image(pngFile.toURI().toString())
+        val importSet  = AafReading.loadImportSet(pngFile, aafFile)
 
-        // Read AafFile
-        //val bytes=  aafFile.inputStream().readBytes()
-        val aafFileReader = BufferedFileReader( JvmInputStreamFileReader(aafFile.inputStream()))
-        val aafReader = AafReaderFactory.readVersionAndGetReader(aafFileReader)
-        val aaf = aafReader.read(aafFileReader)
-
-        // Create new Project and import it
-        //val aaf = AafFileImporter.import(toOpen)
         val project = AafProject()
-        val importSet = AafReading.convert(aaf, img, pngFile.nameWithoutExtension)
-
         project.import(importSet)
         master.projectSet.add(project)
 
@@ -50,9 +40,11 @@ object ImportCommand : ICommand{
         val workspace = obj as? IAafProject ?: master.projectSet.current
                 ?: return OpenCommand.execute(master, obj)
         val toOpen = master.dialog.promptForOpen("Import Aaf File") ?: return true
-        val aaf = AafFileImporter.import(toOpen)
+        val (pngFile, aafFile) = AafReading.getAafFiles(toOpen)
+        val importSet  = AafReading.loadImportSet(pngFile, aafFile)
 
-        //workspace.import(aaf.animations, aaf.celSet)
+
+        workspace.import(importSet)
 
         return true
     }
