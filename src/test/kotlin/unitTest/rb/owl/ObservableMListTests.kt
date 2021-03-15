@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 
 
 class ObservableMListTests {
-    @Test
+    //@Test
     fun Observe() {
         val list = ObservableMList<Double>()
 
@@ -23,11 +23,9 @@ class ObservableMListTests {
             }
 
             override fun elementsChanged(changes: Set<ListChange<Double>>) {
-                TODO("Not yet implemented")
             }
 
             override fun elementsPermuted(permutation: ListPermuation) {
-                TODO("Not yet implemented")
             }
         }.observer()
         val contract = list.addObserver(observer)
