@@ -1,10 +1,12 @@
 package demos.rb.owl
 
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.OnChangeEvent
-import rb.owl.bindableMList.BindableMList
-import rb.owl.bindableMList.IListTriggers
-import rb.jvm.WeakObserver
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.OnChangeEvent
+import old.rb.owl.bindableMList.BindableMList
+import old.rb.owl.bindableMList.IListTriggers
+import old.rb.owl.bindableMList.ListChange
+import old.rb.owl.bindableMList.ListPermuation
+import old.rbJvm.jvm.WeakObserver
 
 class WeakObserverTests {
     //@Test
@@ -51,6 +53,13 @@ class WeakObserverTests {
             val x = object: IListTriggers<Double> {
                 override fun elementsAdded(inex: Int, elements: Collection<Double>) {}
                 override fun elementsRemoved(elements: Collection<Double>) {}
+                override fun elementsChanged(changes: Set<ListChange<Double>>) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun elementsPermuted(permutation: ListPermuation) {
+                    TODO("Not yet implemented")
+                }
             }
             val weakObservable = WeakObserver<IListTriggers<Double>>(x)
             bindable.addObserver(weakObservable)

@@ -1,10 +1,10 @@
 package clearpipe.canvasFxDraws
 
-import rb.vectrix.intersect.CollisionCircle
-import rb.vectrix.intersect.CollisionObject
-import rb.vectrix.intersect.CollisionRigidRect
-import rb.vectrix.shapes.CircleD
-import rb.vectrix.shapes.RectD
+import old.rb.vectrix.intersect.CollisionCircle
+import old.rb.vectrix.intersect.CollisionObject
+import old.rb.vectrix.intersect.CollisionRigidRect
+import old.rb.vectrix.shapes.CircleD
+import old.rb.vectrix.shapes.RectD
 
 fun CollisionObject.shift(x: Double, y: Double) : CollisionObject{
     return when(this) {

@@ -4,12 +4,12 @@ import clearpipe.model.imageData.AafAnimation
 import clearpipe.model.imageData.CelSet
 import clearpipe.model.imageData.IAafProject
 import clearpipe.model.imageData.MAafProject
-import rb.IContract
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.IBindObserver
-import rb.owl.bindable.IBindable
-import rb.owl.bindable.addObserver
-import rb.owl.bindableMList.*
+import old.rb.IContract
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.IBindObserver
+import old.rb.owl.bindable.IBindable
+import old.rb.owl.bindable.addObserver
+import old.rb.owl.bindableMList.*
 
 interface ICentralObservatory {
     val currentAafProject : Bindable<MAafProject?>

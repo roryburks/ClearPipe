@@ -5,9 +5,9 @@ import clearpipe.ui.mainViews.center.hitbox.HitboxPenner
 import clearpipe.ui.mainViews.center.hitbox.IDrawnHitboxPennerBehavior
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
-import rb.vectrix.intersect.CollisionRigidRect
-import rb.vectrix.mathUtil.s
-import rb.vectrix.shapes.RectD
+import old.rb.vectrix.intersect.CollisionRigidRect
+import old.rb.vectrix.mathUtil.s
+import old.rb.vectrix.shapes.RectD
 
 class BuildingRectangleBehavior : IDrawnHitboxPennerBehavior {
     var startX = 0.0

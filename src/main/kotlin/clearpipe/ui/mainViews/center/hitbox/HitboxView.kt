@@ -11,16 +11,16 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
-import rb.extendo.delegates.OnChangeDelegate
-import rb.jvm.javafx.selectedBind
-import rb.jvm.javafx.valueBind
+import old.rb.extendo.delegates.OnChangeDelegate
+import old.rbJvm.jvm.javafx.selectedBind
+import old.rbJvm.jvm.javafx.valueBind
 import rb.owl.Observable
 import rb.owl.addObserver
-import rb.owl.bindable.addObserver
-import rb.vectrix.mathUtil.MathUtil
-import rb.vectrix.mathUtil.d
-import rb.vectrix.mathUtil.floor
-import rb.vectrix.mathUtil.i
+import old.rb.owl.bindable.addObserver
+import old.rb.vectrix.mathUtil.MathUtil
+import old.rb.vectrix.mathUtil.d
+import old.rb.vectrix.mathUtil.floor
+import old.rb.vectrix.mathUtil.i
 import tornadofx.*
 
 typealias HitboxTrigger = ()->Unit

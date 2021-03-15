@@ -1,0 +1,93 @@
+package old.rb.vectrix.mathUtil
+
+import kotlin.math.min
+import kotlin.math.sqrt
+
+object MathUtil {
+    fun distance(x1: Double, y1: Double, x2: Double, y2: Double): Double {
+        return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
+    }
+
+    fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        return sqrt(((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)).toDouble()).toFloat()
+    }
+
+
+    fun cycle(start: Int, end: Int, t: Int) = when( val diff = end - start){
+        0 -> 0
+        else -> ((t - start) % diff + diff) % diff + start
+    }
+    fun cycle(start: Float, end: Float, t: Float) = when( val diff = end - start){
+        0.0f -> 0.0f
+        else -> ((t - start) % diff + diff) % diff + start
+    }
+    fun cycle(start: Double, end: Double, t: Double): Double = when( val diff = end - start) {
+        0.0 -> 0.0
+        else -> ((t - start) % diff + diff) % diff + start
+    }
+
+    fun lerp( min: Float, max: Float, t:Float) = min + (max - min)*t
+    fun lerp( min: Double, max: Double, t:Double) = min + (max - min)*t
+    fun derp( minT: Float, maxT: Float, t:Float) = (t - minT)/(maxT-minT)
+    fun derp( minT: Double, maxT: Double, t:Double) = (t - minT)/(maxT-minT)
+    fun lerpyDerp(min: Float, max:Float, lowT: Float, highT: Float, t: Float) = min + (max-min)*(t-lowT)/(highT-lowT)
+    fun lerpyDerp(min: Double, max:Double, lowT: Double, highT: Double, t: Double) = min + (max-min)*(t-lowT)/(highT-lowT)
+
+    //region minOrNull
+    fun minOrNull(a: Float?, b: Float?) = when {
+        a == null -> when {
+            b == null -> null
+            else -> b
+        }
+        b == null -> a
+        else -> min(a, b)
+    }
+
+    fun minOrNull(a: Float?, b: Float?, c:Float?) = when {
+        a == null -> when {
+            b == null -> when {
+                c == null -> null
+                else -> c
+            }
+            c == null -> b
+            else -> min(b,c)
+        }
+        b == null -> when {
+            c == null -> a
+            else -> min(a,c)
+        }
+        else -> when {
+            c == null -> min(a,b)
+            else -> minOf(a,b,c)
+        }
+    }
+
+    fun minOrNull(a: Double?, b: Double?) = when {
+        a == null -> when {
+            b == null -> null
+            else -> b
+        }
+        b == null -> a
+        else -> min(a, b)
+    }
+
+    fun minOrNull(a: Double?, b: Double?, c:Double?) = when {
+        a == null -> when {
+            b == null -> when {
+                c == null -> null
+                else -> c
+            }
+            c == null -> b
+            else -> min(b,c)
+        }
+        b == null -> when {
+            c == null -> a
+            else -> min(a,c)
+        }
+        else -> when {
+            c == null -> min(a,b)
+            else -> minOf(a,b,c)
+        }
+    }
+    // endregion
+}

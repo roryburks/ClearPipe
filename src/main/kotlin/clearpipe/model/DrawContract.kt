@@ -2,8 +2,7 @@ package clearpipe.model
 
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.image.Image
-import rb.vectrix.shapes.Rect
-import rb.vectrix.shapes.RectI
+import old.rb.vectrix.shapes.Rect
 
 data class DrawContract(
     val image: Image,
