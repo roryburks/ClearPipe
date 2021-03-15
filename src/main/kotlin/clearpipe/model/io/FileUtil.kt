@@ -1,6 +1,6 @@
 package clearpipe.model.io
 
-import old.rb.vectrix.mathUtil.i
+import rb.vectrix.mathUtil.i
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.RandomAccessFile

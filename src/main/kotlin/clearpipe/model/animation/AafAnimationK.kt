@@ -2,10 +2,10 @@ package clearpipe.model.animation
 
 import clearpipe.model.DrawContract
 import javafx.scene.image.Image
-import old.rb.vectrix.intersect.CollisionObject
-import old.rb.vectrix.mathUtil.MathUtil
-import old.rb.vectrix.mathUtil.d
-import old.rb.vectrix.shapes.RectI
+import rb.vectrix.intersect.CollisionObject
+import rb.vectrix.mathUtil.MathUtil
+import rb.vectrix.mathUtil.d
+import rb.vectrix.shapes.RectI
 
 
 class AafAnimationK(

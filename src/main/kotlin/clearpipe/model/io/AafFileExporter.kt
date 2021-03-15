@@ -8,16 +8,16 @@ import javafx.scene.paint.Color
 import old.rb.extendo.extensions.nest
 import old.rb.extendo.extensions.pop
 import old.rb.extendo.extensions.toLookup
-import old.rb.vectrix.intersect.CollisionCircle
-import old.rb.vectrix.intersect.CollisionPoint
-import old.rb.vectrix.intersect.CollisionRigidRect
-import old.rb.vectrix.linear.Vec2i
-import old.rb.vectrix.mathUtil.d
-import old.rb.vectrix.mathUtil.f
-import old.rb.vectrix.mathUtil.i
-import old.rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
-import old.rb.vectrix.rectanglePacking.PackedRectangle
-import old.rb.vectrix.shapes.RectI
+import rb.vectrix.intersect.CollisionCircle
+import rb.vectrix.intersect.CollisionPoint
+import rb.vectrix.intersect.CollisionRigidRect
+import rb.vectrix.linear.Vec2i
+import rb.vectrix.mathUtil.d
+import rb.vectrix.mathUtil.f
+import rb.vectrix.mathUtil.i
+import rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
+import rb.vectrix.rectanglePacking.PackedRectangle
+import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 import javax.imageio.ImageIO
@@ -109,7 +109,7 @@ object CelsetCompressor {
     fun compressCelsets(project: MAafProject, name: String) {
         val (cels, remapping) = getUsedNonDuplicateCells(project.animations)
 
-        val packedRect = ModifiedSleatorAlgorithm(cels.map { Vec2i(it.region.wi, it.region.hi) })
+        val packedRect = ModifiedSleatorAlgorithm.pack(cels.map { Vec2i(it.region.wi, it.region.hi) })
 
         val (newCelset, remappingMap) = drawAndMap(packedRect, cels, remapping, name)
 

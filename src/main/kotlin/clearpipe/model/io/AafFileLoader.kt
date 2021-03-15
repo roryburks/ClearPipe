@@ -3,14 +3,14 @@ package clearpipe.model.io
 import clearpipe.model.animation.AafChunkK
 import clearpipe.model.animation.AafFrameK
 import clearpipe.model.animation.AafHitboxK
-import old.rb.vectrix.intersect.*
-import old.rb.vectrix.mathUtil.d
-import old.rb.vectrix.mathUtil.i
-import old.rb.vectrix.mathUtil.s
-import old.rb.vectrix.shapes.CircleD
-import old.rb.vectrix.shapes.LineSegmentD
-import old.rb.vectrix.shapes.RectD
-import old.rb.vectrix.shapes.RectI
+import rb.vectrix.intersect.*
+import rb.vectrix.mathUtil.d
+import rb.vectrix.mathUtil.i
+import rb.vectrix.mathUtil.s
+import rb.vectrix.shapes.CircleD
+import rb.vectrix.shapes.LineSegmentD
+import rb.vectrix.shapes.RectD
+import rb.vectrix.shapes.RectI
 import java.io.File
 import java.io.RandomAccessFile
 
@@ -81,7 +81,7 @@ object AafFileLoader : IAafFileLoader {
         return AafFile(anims, cels)
     }
 
-    fun loadHitbox(ra: RandomAccessFile) : CollisionObject{
+    fun loadHitbox(ra: RandomAccessFile) : CollisionObject {
         return when( val colTypeId = ra.readUnsignedByte()) {
             FileConsts.ColKind_Point -> CollisionPoint(ra.readFloat().d, ra.readFloat().d)
             FileConsts.ColKind_RigidRect -> CollisionRigidRect(RectD(ra.readFloat().d, ra.readFloat().d, ra.readFloat().d, ra.readFloat().d))

@@ -6,8 +6,8 @@ import javafx.collections.FXCollections
 import javafx.scene.control.ListCell
 import javafx.util.Callback
 import old.rb.extendo.delegates.OnChangeDelegate
-import old.rb.vectrix.intersect.CollisionCircle
-import old.rb.vectrix.intersect.CollisionRigidRect
+import rb.vectrix.intersect.CollisionCircle
+import rb.vectrix.intersect.CollisionRigidRect
 import tornadofx.Controller
 import tornadofx.View
 import tornadofx.listview

@@ -3,7 +3,7 @@ package old.rb.owl.interprettedBindings
 import old.rb.IContract
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindable.addObserver
-import old.rb.vectrix.linear.Vec2f
+import rb.vectrix.linear.Vec2f
 
 
 fun Bindable<Float>.bindToX( root: Bindable<Vec2f> ) : IContract

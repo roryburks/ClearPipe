@@ -13,8 +13,8 @@ import javafx.scene.transform.Scale
 import old.rb.extendo.delegates.OnChangeDelegate
 import old.rb.owl.bindable.Bindable
 import old.rbJvm.jvm.addWeakObserver
-import old.rb.vectrix.mathUtil.d
-import old.rb.vectrix.mathUtil.floor
+import rb.vectrix.mathUtil.d
+import rb.vectrix.mathUtil.floor
 import tornadofx.*
 import kotlin.math.pow
 

@@ -7,9 +7,9 @@ import old.rb.extendo.delegates.OnChangeDelegate
 import old.rbJvm.jvm.javafx.intBind
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindable.addObserver
-import old.rb.vectrix.mathUtil.d
-import old.rb.vectrix.mathUtil.floor
-import old.rb.vectrix.mathUtil.round
+import rb.vectrix.mathUtil.d
+import rb.vectrix.mathUtil.floor
+import rb.vectrix.mathUtil.round
 import tornadofx.*
 import java.util.*
 

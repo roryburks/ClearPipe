@@ -8,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext
 import old.rb.extendo.delegates.OnChangeDelegate
 import rb.owl.Observable
 import old.rb.owl.bindable.Bindable
-import old.rb.vectrix.intersect.CollisionPoint
+import rb.vectrix.intersect.CollisionPoint
 
 interface IHitboxPenner
 {

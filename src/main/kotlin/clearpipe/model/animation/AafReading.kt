@@ -1,10 +1,10 @@
 package clearpipe.model.animation
 
 import javafx.scene.image.Image
-import old.rb.vectrix.shapes.RectI
 import rb.animo.io.aaf.AafColisionMapper
 import rb.animo.io.aaf.AafFile
 import rb.vectrix.mathUtil.s
+import rb.vectrix.shapes.RectI
 import java.io.File
 
 object AafReading {
@@ -25,11 +25,10 @@ object AafReading {
                         offsetY = chunk.offsetY.s,
                         drawDepth = chunk.drawDepth )
                 }
-                // TODO()
-//                val hboxes = frame.hitboxes.map {
-//                    val col = AafColisionMapper.mapToVectrix(it.col)
-//                    AafHitboxK(it.typeId.s, col)
-//                }
+                val hboxes = frame.hitboxes.map {
+                    val col = AafColisionMapper.mapToVectrix(it.col)
+                    AafHitboxK(it.typeId.s, col)
+                }
 
                 AafFrameK( chunks, listOf() )
             }

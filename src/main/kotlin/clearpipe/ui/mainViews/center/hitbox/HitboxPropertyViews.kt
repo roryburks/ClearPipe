@@ -5,12 +5,12 @@ import javafx.scene.Parent
 import rb.owl.Observable
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindable.addObserver
-import old.rb.vectrix.intersect.CollisionCircle
-import old.rb.vectrix.intersect.CollisionRigidRect
-import old.rb.vectrix.shapes.Circle
-import old.rb.vectrix.shapes.CircleD
-import old.rb.vectrix.shapes.Rect
-import old.rb.vectrix.shapes.RectD
+import rb.vectrix.intersect.CollisionCircle
+import rb.vectrix.intersect.CollisionRigidRect
+import rb.vectrix.shapes.Circle
+import rb.vectrix.shapes.CircleD
+import rb.vectrix.shapes.Rect
+import rb.vectrix.shapes.RectD
 import tornadofx.*
 
 object HitboxPropertyViewFactory

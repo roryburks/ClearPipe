@@ -1,7 +1,7 @@
 package clearpipe.canvasFxDraws
 
 import javafx.scene.canvas.GraphicsContext
-import old.rb.vectrix.intersect.*
+import rb.vectrix.intersect.*
 
 fun CollisionObject.draw(gc: GraphicsContext){
     when(this) {

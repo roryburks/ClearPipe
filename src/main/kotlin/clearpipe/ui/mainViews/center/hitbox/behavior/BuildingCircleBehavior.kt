@@ -5,10 +5,10 @@ import clearpipe.ui.mainViews.center.hitbox.HitboxPenner
 import clearpipe.ui.mainViews.center.hitbox.IDrawnHitboxPennerBehavior
 import javafx.scene.canvas.GraphicsContext
 import javafx.scene.paint.Color
-import old.rb.vectrix.intersect.CollisionCircle
-import old.rb.vectrix.mathUtil.MathUtil
-import old.rb.vectrix.mathUtil.s
-import old.rb.vectrix.shapes.CircleD
+import rb.vectrix.intersect.CollisionCircle
+import rb.vectrix.mathUtil.MathUtil
+import rb.vectrix.mathUtil.s
+import rb.vectrix.shapes.CircleD
 
 class BuildingCircleBehavior : IDrawnHitboxPennerBehavior {
     var startX = 0.0

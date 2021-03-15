@@ -17,10 +17,10 @@ import old.rbJvm.jvm.javafx.valueBind
 import rb.owl.Observable
 import rb.owl.addObserver
 import old.rb.owl.bindable.addObserver
-import old.rb.vectrix.mathUtil.MathUtil
-import old.rb.vectrix.mathUtil.d
-import old.rb.vectrix.mathUtil.floor
-import old.rb.vectrix.mathUtil.i
+import rb.vectrix.mathUtil.MathUtil
+import rb.vectrix.mathUtil.d
+import rb.vectrix.mathUtil.floor
+import rb.vectrix.mathUtil.i
 import tornadofx.*
 
 typealias HitboxTrigger = ()->Unit
