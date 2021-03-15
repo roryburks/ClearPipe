@@ -1,7 +1,7 @@
 package clearmap.model.clearWaterZone
 
 import old.rb.extendo.delegates.OnChangeDelegate
-import rb.owl.bindableMList.BindableMListSet
+import old.rb.owl.bindableMList.BindableMListSet
 
 
 class CwzTileSetModel {

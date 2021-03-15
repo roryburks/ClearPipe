@@ -4,10 +4,10 @@ import old.rb.extendo.extensions.mapRemoveIfNull
 import old.rb.IContract
 import rb.owl.IObservable
 import rb.owl.IObserver
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.IBindObserver
-import rb.owl.bindable.IBindable
-import rb.owl.bindable.OnChangeEvent
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.IBindObserver
+import old.rb.owl.bindable.IBindable
+import old.rb.owl.bindable.OnChangeEvent
 import java.lang.ref.WeakReference
 import kotlin.reflect.KProperty
 

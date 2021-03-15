@@ -1,4 +1,4 @@
-package rb.owl.bindableMList
+package old.rb.owl.bindableMList
 
 import rb.owl.IObservable
 import rb.owl.IObserver

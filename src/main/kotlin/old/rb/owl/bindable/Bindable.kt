@@ -1,4 +1,4 @@
-package rb.owl.bindable
+package old.rb.owl.bindable
 
 import old.rb.IContract
 import old.rb.extendo.extensions.mapRemoveIfNull

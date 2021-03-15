@@ -1,11 +1,10 @@
 package rb.owl.jvm.javafx
 
-import clearpipe.model.imageData.CelSet
 import javafx.beans.InvalidationListener
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
-import rb.owl.bindableMList.*
+import old.rb.owl.bindableMList.*
 
 fun <T> ObservableMList<T>.adaptToJFX() = AdaptedToObservableList(this)
 

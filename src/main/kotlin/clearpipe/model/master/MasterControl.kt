@@ -2,15 +2,12 @@ package clearpipe.model.master
 
 import clearpipe.model.Dialog
 import clearpipe.model.IDialog
-import clearpipe.model.imageData.AafProject
-import clearpipe.model.imageData.IAafProject
 import clearpipe.model.imageData.MAafProject
 import clearpipe.model.master.settings.ISettingsManager
 import clearpipe.model.master.settings.JPreferences
 import clearpipe.model.master.settings.SettingsManager
-import rb.owl.other.ISelectableList
-import rb.owl.other.MSelectableList
-import rb.owl.other.SelectableList
+import old.rb.owl.other.MSelectableList
+import old.rb.owl.other.SelectableList
 import tornadofx.Controller
 
 interface IMasterControl {

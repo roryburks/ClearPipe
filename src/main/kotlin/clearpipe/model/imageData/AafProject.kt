@@ -3,9 +3,9 @@ package clearpipe.model.imageData
 import clearpipe.model.DrawContract
 import javafx.scene.image.Image
 import old.rb.extendo.extensions.toHashMap
-import rb.owl.bindable.Bindable
-import rb.owl.bindableMList.BindableMList
-import rb.owl.bindableMList.IBindableMList
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindableMList.BindableMList
+import old.rb.owl.bindableMList.IBindableMList
 import old.rb.vectrix.intersect.CollisionObject
 import old.rb.vectrix.mathUtil.MathUtil
 import old.rb.vectrix.mathUtil.d

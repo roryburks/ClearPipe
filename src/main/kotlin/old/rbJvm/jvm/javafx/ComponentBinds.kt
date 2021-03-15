@@ -4,8 +4,8 @@ import clearpipe.ui.mainViews.addValueListener
 import javafx.scene.control.ListView
 import javafx.scene.control.Slider
 import javafx.scene.control.TextField
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.addObserver
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.addObserver
 
 fun Slider.valueBind() : Bindable<Double> {
     val bindable = Bindable(this.value)

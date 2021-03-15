@@ -1,4 +1,4 @@
-package rb.owl.bindableMList
+package old.rb.owl.bindableMList
 
 fun <T> IBindableMList<T>.onRemove(lambda: (removed: Collection<T>)->Unit) = addObserver(
             object : IListTriggers<T> {

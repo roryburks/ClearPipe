@@ -1,12 +1,9 @@
 package unitTest.rb.owl
 
 import org.junit.Test
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.onChangeObserver
-import rb.owl.bindableMList.BindableMList
-import rb.owl.bindableMList.IListTriggers
-import rb.owl.bindableMList.ObservableMList
-import rb.owl.bindableMList.observer
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.onChangeObserver
+import old.rb.owl.bindableMList.*
 import kotlin.test.assertEquals
 
 
@@ -23,6 +20,14 @@ class ObservableMListTests {
             }
             override fun elementsRemoved(elements: Collection<Double>) {
                 elements.forEach { sum -= it }
+            }
+
+            override fun elementsChanged(changes: Set<ListChange<Double>>) {
+                TODO("Not yet implemented")
+            }
+
+            override fun elementsPermuted(permutation: ListPermuation) {
+                TODO("Not yet implemented")
             }
         }.observer()
         val contract = list.addObserver(observer)
@@ -63,6 +68,13 @@ class ObservableMListTests {
         val observer = object : IListTriggers<Double> {
             override fun elementsAdded(inex: Int, elements: Collection<Double>) {elements.forEach { sum += it }}
             override fun elementsRemoved(elements: Collection<Double>) {elements.forEach { sum -= it }}
+            override fun elementsChanged(changes: Set<ListChange<Double>>) {
+                TODO("Not yet implemented")
+            }
+
+            override fun elementsPermuted(permutation: ListPermuation) {
+                TODO("Not yet implemented")
+            }
         }.observer()
         val contract = bindable2.addObserver(observer)
 

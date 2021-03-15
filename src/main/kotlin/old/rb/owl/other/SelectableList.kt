@@ -1,11 +1,11 @@
-package rb.owl.other
+package old.rb.owl.other
 
 import rb.owl.IObservable
 import rb.owl.IObserver
 import rb.owl.Observable
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.IBindable
-import rb.owl.bindable.addObserver
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.IBindable
+import old.rb.owl.bindable.addObserver
 
 
 interface ISelectableListTriggers<T> {

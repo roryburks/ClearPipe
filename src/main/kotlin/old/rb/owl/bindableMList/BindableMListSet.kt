@@ -1,6 +1,6 @@
-package rb.owl.bindableMList
+package old.rb.owl.bindableMList
 
-import rb.owl.bindable.Bindable
+import old.rb.owl.bindable.Bindable
 
 interface IBindableMListSet<T> : IBindableMList<T> {
     val currentlySelectedBind: Bindable<T?>

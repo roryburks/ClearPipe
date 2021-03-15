@@ -1,4 +1,4 @@
-package rb.owl.bindableMList
+package old.rb.owl.bindableMList
 
 import old.rb.IContract
 import old.rb.extendo.dataStructures.SinglyCollection

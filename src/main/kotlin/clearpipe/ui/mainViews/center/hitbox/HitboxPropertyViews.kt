@@ -3,8 +3,8 @@ package clearpipe.ui.mainViews.center.hitbox
 import clearpipe.model.imageData.AafHitbox
 import javafx.scene.Parent
 import rb.owl.Observable
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.addObserver
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.addObserver
 import old.rb.vectrix.intersect.CollisionCircle
 import old.rb.vectrix.intersect.CollisionRigidRect
 import old.rb.vectrix.shapes.Circle

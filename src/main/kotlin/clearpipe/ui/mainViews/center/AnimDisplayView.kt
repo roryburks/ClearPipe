@@ -5,8 +5,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import old.rb.extendo.delegates.OnChangeDelegate
 import old.rbJvm.jvm.javafx.intBind
-import rb.owl.bindable.Bindable
-import rb.owl.bindable.addObserver
+import old.rb.owl.bindable.Bindable
+import old.rb.owl.bindable.addObserver
 import old.rb.vectrix.mathUtil.d
 import old.rb.vectrix.mathUtil.floor
 import old.rb.vectrix.mathUtil.round

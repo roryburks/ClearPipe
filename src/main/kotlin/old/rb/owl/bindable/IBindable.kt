@@ -1,4 +1,4 @@
-package rb.owl.bindable
+package old.rb.owl.bindable
 
 import rb.owl.IObservable
 import rb.owl.IObserver
