@@ -1,0 +1,11 @@
+package clearpipe.cli
+
+import clearpipe.cli.commands.ParseExportAafCommand
+import java.io.File
+
+fun main(args : Array<String>) {
+    ParseExportAafCommand.execute(
+        listOf(File("S:\\Fauna\\Res\\SRF")),
+        File("E:\\Bucket\\sif\\export.csv") )
+
+}

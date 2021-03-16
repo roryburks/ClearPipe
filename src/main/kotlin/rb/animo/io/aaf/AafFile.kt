@@ -3,8 +3,7 @@ package rb.animo.io.aaf
 data class AafFile(
     val version: Int,
     val animations : List<AafFAnimation>,
-    val cels : List<AafFCel>
-)
+    val cels : List<AafFCel>)
 
 data class AafFAnimation(
     val name: String,
