@@ -5,7 +5,7 @@ import java.io.File
 
 fun main(args : Array<String>) {
     ParseExportAafCommand.execute(
-        listOf(File("S:\\Fauna\\Res\\SRF")),
+        listOf(File("S:\\Fauna\\Res\\AAF\\enemies")),
         File("E:\\Bucket\\sif\\export.csv") )
 
 }

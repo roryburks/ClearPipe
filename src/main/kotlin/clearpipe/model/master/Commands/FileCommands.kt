@@ -1,10 +1,6 @@
 package clearpipe.model.master.Commands
 
-import clearpipe.model.animation.AafProject
-import clearpipe.model.animation.AafReading
-import clearpipe.model.animation.IAafProject
-import clearpipe.model.animation.MAafProject
-import clearpipe.model.io.AafFileExporter
+import clearpipe.model.animation.*
 import clearpipe.model.master.IMasterControl
 import java.io.File
 
@@ -54,7 +50,8 @@ object SaveCommand : ICommand {
         if( toSave.extension == "" ) {
             toSave = File(toSave.absolutePath + ".aaf")
         }
-        AafFileExporter.exportFile(workspace, toSave)
+        AafWriting.exportFile(workspace, toSave)
+        //AafFileExporter.exportFile(workspace, toSave)
         return true
     }
 
