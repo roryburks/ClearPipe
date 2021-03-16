@@ -5,12 +5,7 @@ import clearpipe.model.animation.AafReading
 import clearpipe.model.animation.IAafProject
 import clearpipe.model.animation.MAafProject
 import clearpipe.model.io.AafFileExporter
-import clearpipe.model.io.AafFileImporter
 import clearpipe.model.master.IMasterControl
-import javafx.scene.image.Image
-import rb.animo.io.aaf.reader.AafReaderFactory
-import rb.file.BufferedFileReader
-import rbJvm.file.JvmInputStreamFileReader
 import java.io.File
 
 interface ICommand {
