@@ -1,4 +1,4 @@
-package rb.owl
+package old.rb.owl
 
 import old.rb.IContract
 
@@ -11,7 +11,7 @@ class Observer<T>(override val trigger: T) : IObserver<T>
 fun <T> T.observer() = Observer(this)
 
 interface IObservable<T> {
-    fun addObserver( observer: IObserver<T>, trigger: Boolean = true) : IContract
+    fun addObserver(observer: IObserver<T>, trigger: Boolean = true) : IContract
 }
 
 class Observable<T> : IObservable<T>

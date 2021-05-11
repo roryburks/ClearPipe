@@ -4,7 +4,7 @@ import old.rb.IContract
 import old.rb.extendo.dataStructures.SinglyCollection
 import old.rb.extendo.dataStructures.SinglySet
 import old.rb.extendo.extensions.asHashSet
-import rb.owl.IObserver
+import old.rb.owl.IObserver
 
 
 class ObservableMList<T>

@@ -1,7 +1,7 @@
 package old.rb.owl.bindable
 
-import rb.owl.IObservable
-import rb.owl.IObserver
+import old.rb.owl.IObservable
+import old.rb.owl.IObserver
 
 
 typealias IBindObserver<T> = IObserver<OnChangeEvent<T>>

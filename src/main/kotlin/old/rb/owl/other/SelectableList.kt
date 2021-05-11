@@ -1,8 +1,8 @@
 package old.rb.owl.other
 
-import rb.owl.IObservable
-import rb.owl.IObserver
-import rb.owl.Observable
+import old.rb.owl.IObservable
+import old.rb.owl.IObserver
+import old.rb.owl.Observable
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindable.IBindable
 import old.rb.owl.bindable.addObserver
@@ -14,7 +14,7 @@ interface ISelectableListTriggers<T> {
     fun changed( new: T?, old: T?)
 }
 
-interface ISelectableList<T> :IObservable<ISelectableListTriggers<T>> {
+interface ISelectableList<T> : IObservable<ISelectableListTriggers<T>> {
     val currentBind: IBindable<T?>
     val current : T?
     val all : List<T>
