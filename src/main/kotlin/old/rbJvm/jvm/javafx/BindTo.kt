@@ -1,7 +1,7 @@
 package rb.owl.jvm.javafx
 
 import javafx.collections.ObservableList
-import old.rb.owl.bindableMList.*
+import rb.owl.bindableMList.*
 
 fun <T> ObservableList<T>.bindTo(mlist: IBindableMList<T>) {
     val olist = this

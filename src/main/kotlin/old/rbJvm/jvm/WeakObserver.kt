@@ -1,20 +1,22 @@
 package old.rbJvm.jvm
 
+import rb.extendo.dataStructures.SinglySequence
 import rb.extendo.extensions.mapRemoveIfNull
 import rb.global.IContract
-import old.rb.owl.IObservable
-import old.rb.owl.IObserver
-import old.rb.owl.bindable.Bindable
-import old.rb.owl.bindable.IBindObserver
-import old.rb.owl.bindable.IBindable
-import old.rb.owl.bindable.OnChangeEvent
+import rb.owl.IObservable
+import rb.owl.IObserver
+import rb.owl.bindable.Bindable
+import rb.owl.bindable.IBindObserver
+import rb.owl.bindable.IBindable
+import rb.owl.bindable.OnChangeEvent
 import java.lang.ref.WeakReference
 import kotlin.reflect.KProperty
 
 class WeakObserver<T>(trigger: T) : IObserver<T>
 {
     private val weakTrigger = WeakReference(trigger)
-    override val trigger : T? =  weakTrigger.get()
+    val trigger : T? =  weakTrigger.get()
+    override val triggers: Sequence<T>? get() = trigger?.run { SinglySequence(this)}
 }
 
 /** Note: the contract strongly references the Trigger, so the trigger is preserved as long as the contract is. */
@@ -49,7 +51,8 @@ class WeakBindable<T>(default: T) : IObservable<OnChangeEvent<T>>
     }
 
     private val binds = mutableListOf<BindContract>()
-    private val triggers get() = observers.mapRemoveIfNull { it.trigger }
+    private val triggers get() = observers.mapRemoveIfNull { it.triggers }
+        .flatMap { it }
     private val observers = mutableListOf<IBindObserver<T>>()
 
     operator fun getValue(thisRef: Any, prop: KProperty<*>): T = bind.field

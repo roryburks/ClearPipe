@@ -1,6 +1,6 @@
 package clearpipe.ui.mainViews.center.hitbox
 
-import old.rb.owl.bindable.Bindable
+import rb.owl.bindable.Bindable
 
 enum class HitboxTool(val btn: String, val desc: String) {
     Rectangle("R", "Rectangle"),

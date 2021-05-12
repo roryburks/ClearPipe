@@ -6,8 +6,8 @@ import clearpipe.model.animation.MAafProject
 import clearpipe.model.master.settings.ISettingsManager
 import clearpipe.model.master.settings.JPreferences
 import clearpipe.model.master.settings.SettingsManager
-import old.rb.owl.other.MSelectableList
-import old.rb.owl.other.SelectableList
+import rb.owl.other.MSelectableList
+import rb.owl.other.SelectableList
 import tornadofx.Controller
 
 interface IMasterControl {

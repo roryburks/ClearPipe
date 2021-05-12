@@ -5,8 +5,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import rb.extendo.delegates.OnChangeDelegate
 import old.rbJvm.jvm.javafx.intBind
-import old.rb.owl.bindable.Bindable
-import old.rb.owl.bindable.addObserver
+import rb.owl.bindable.Bindable
+import rb.owl.bindable.addObserver
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.floor
 import rb.vectrix.mathUtil.round
@@ -90,15 +90,16 @@ class AnimDisplayController( val master: IMasterControl) : Controller()
 private class AnimDrawView(
     val master: IMasterControl,
     val controller: AnimDisplayController) : View() {
+
+    var localMet by OnChangeDelegate(0) {redraw()}
+    val canvas = canvas(500.0,500.0) {}
+
     init {
         controller.animBind.addObserver { _, _ -> redraw() }
         controller.oxBind.addObserver { _, _ -> redraw() }
         controller.oyBind.addObserver { _, _ -> redraw() }
         controller.metBind.addObserver { new, _ -> localMet = new.floor }
     }
-
-    var localMet by OnChangeDelegate(0) {redraw()}
-    val canvas = canvas(500.0,500.0) {}
 
     override val root= scrollpane {
         add(canvas)

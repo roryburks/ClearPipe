@@ -5,11 +5,11 @@ import clearpipe.model.animation.AafCelSetK
 import clearpipe.model.animation.IAafProject
 import clearpipe.model.animation.MAafProject
 import rb.global.IContract
-import old.rb.owl.bindable.Bindable
-import old.rb.owl.bindable.IBindObserver
-import old.rb.owl.bindable.IBindable
-import old.rb.owl.bindable.addObserver
-import old.rb.owl.bindableMList.*
+import rb.owl.bindable.Bindable
+import rb.owl.bindable.IBindObserver
+import rb.owl.bindable.IBindable
+import rb.owl.bindable.addObserver
+import rb.owl.bindableMList.*
 
 interface ICentralObservatory {
     val currentAafProject : Bindable<MAafProject?>
@@ -52,13 +52,13 @@ class CentralObservatory(val master: MasterControl) : ICentralObservatory{
                 when(new) {
                     null -> {
                         currentContract = null
-                        binds.removeIf { it.observer.trigger?.invoke(null, oldF)  == null }
+                        binds.removeIf { it.observer.triggers?.forEach { it.invoke(null, oldF)}  == null }
                     }
                     else -> {
                         val newF = finder(new).field
-                        binds.removeIf { it.observer.trigger?.invoke(newF, oldF) == null}
+                        binds.removeIf { it.observer.triggers?.forEach { it.invoke(newF, oldF)} == null}
                         currentContract = finder(new).addObserver{newt: T, oldt : T ->
-                            binds.removeIf { it.observer.trigger?.invoke(newt, oldt) == null }
+                            binds.removeIf { it.observer.triggers?.forEach { it.invoke(newt, oldt)} == null }
                         }
                     }
                 }
@@ -72,13 +72,13 @@ class CentralObservatory(val master: MasterControl) : ICentralObservatory{
 
         val obs = object : IListTriggers<T> {
             override fun elementsAdded(index: Int, elements: Collection<T>)
-            {binds.removeIf { it.observer.trigger?.elementsAdded(index, elements) == null }}
+            {binds.removeIf { it.observer.triggers?.forEach { it.elementsAdded(index, elements)} == null }}
             override fun elementsRemoved(elements: Collection<T>)
-            {binds.removeIf { it.observer.trigger?.elementsRemoved(elements) == null }}
+            {binds.removeIf { it.observer.triggers?.forEach { it.elementsRemoved(elements)} == null }}
             override fun elementsChanged(changes: Set<ListChange<T>>)
-            {binds.removeIf { it.observer.trigger?.elementsChanged(changes) == null }}
+            {binds.removeIf { it.observer.triggers?.forEach { it.elementsChanged(changes)} == null }}
             override fun elementsPermuted(permutation: ListPermuation)
-            {binds.removeIf { it.observer.trigger?.elementsPermuted(permutation) == null }}
+            {binds.removeIf { it.observer.triggers?.forEach { it.elementsPermuted(permutation)} == null }}
         }
         override fun addObserver(observer: IMutableListObserver<T>, trigger: Boolean): IContract = Contracter(observer)
 

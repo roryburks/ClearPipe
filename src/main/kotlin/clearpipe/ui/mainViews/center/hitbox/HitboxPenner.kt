@@ -6,8 +6,8 @@ import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingCircleBehavior
 import clearpipe.ui.mainViews.center.hitbox.behavior.BuildingRectangleBehavior
 import javafx.scene.canvas.GraphicsContext
 import rb.extendo.delegates.OnChangeDelegate
-import old.rb.owl.Observable
-import old.rb.owl.bindable.Bindable
+import rb.owl.Observable
+import rb.owl.bindable.Bindable
 import rb.vectrix.intersect.CollisionPoint
 
 interface IHitboxPenner

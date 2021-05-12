@@ -2,9 +2,9 @@ package clearpipe.ui.mainViews.center.hitbox
 
 import clearpipe.model.animation.AafHitboxK
 import javafx.scene.Parent
-import old.rb.owl.Observable
-import old.rb.owl.bindable.Bindable
-import old.rb.owl.bindable.addObserver
+import rb.owl.Observable
+import rb.owl.bindable.Bindable
+import rb.owl.bindable.addObserver
 import rb.vectrix.intersect.CollisionCircle
 import rb.vectrix.intersect.CollisionRigidRect
 import rb.vectrix.shapes.Circle

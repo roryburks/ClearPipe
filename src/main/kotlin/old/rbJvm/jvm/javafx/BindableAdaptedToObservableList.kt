@@ -4,7 +4,8 @@ import javafx.beans.InvalidationListener
 import javafx.collections.FXCollections
 import javafx.collections.ListChangeListener
 import javafx.collections.ObservableList
-import old.rb.owl.bindableMList.*
+import rb.extendo.dataStructures.SinglySequence
+import rb.owl.bindableMList.*
 
 
 fun <T> BindableMList<T>.adaptToJFX() = BindAdaptedToObservableList(this)
@@ -80,7 +81,7 @@ class BindAdaptedToObservableList<T>(list: BindableMList<T>)
 
     init {
         list.addObserver(object : IMutableListObserver<T> {
-            override val trigger: IListTriggers<T> = object : IListTriggers<T> {
+            val trigger: IListTriggers<T> = object : IListTriggers<T> {
                 override fun elementsAdded(index: Int, elements: Collection<T>) {
                     backingList.addAll(index, elements)
                 }
@@ -98,6 +99,7 @@ class BindAdaptedToObservableList<T>(list: BindableMList<T>)
                     }
                 }
             }
+            override val triggers get() = SinglySequence(trigger)
         })
     }
 

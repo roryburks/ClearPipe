@@ -1,9 +1,9 @@
 package clearpipe.model.animation
 
 import rb.extendo.extensions.toHashMap
-import old.rb.owl.bindable.Bindable
-import old.rb.owl.bindableMList.BindableMList
-import old.rb.owl.bindableMList.IBindableMList
+import rb.owl.bindable.Bindable
+import rb.owl.bindableMList.BindableMList
+import rb.owl.bindableMList.IBindableMList
 
 data class AafProjectImportSet(
     val animations: List<AafAnimationK>,
@@ -11,7 +11,7 @@ data class AafProjectImportSet(
 
 
 interface IAafProject {
-    val animationsBind: IBindableMList<AafAnimationK>
+    val animationsBind: BindableMList<AafAnimationK>
     val animations: List<AafAnimationK>
     val currentAnimationBind : Bindable<AafAnimationK?>
     var currentAnimation : AafAnimationK?

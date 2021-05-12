@@ -14,9 +14,9 @@ import javafx.scene.transform.Affine
 import rb.extendo.delegates.OnChangeDelegate
 import old.rbJvm.jvm.javafx.selectedBind
 import old.rbJvm.jvm.javafx.valueBind
-import old.rb.owl.Observable
-import old.rb.owl.addObserver
-import old.rb.owl.bindable.addObserver
+import rb.owl.Observable
+import rb.owl.addObserver
+import rb.owl.bindable.addObserver
 import rb.vectrix.mathUtil.MathUtil
 import rb.vectrix.mathUtil.d
 import rb.vectrix.mathUtil.floor
