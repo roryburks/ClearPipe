@@ -1,18 +1,18 @@
-package old.rb.owl.bindable
+package rb.owl.bindable
 
-import rb.global.IContract
 import rb.extendo.extensions.mapRemoveIfNull
+import rb.global.IContract
 import kotlin.reflect.KProperty
 
-class Bindable<T>(default: T) : IBindable<T>
+class Bindable<T>(default: T, private val mutator:  ((T)->T)? = null) : IBindable<T>
 {
     // region Public
     override var field: T
         get() = underlying.value
-        set(value) {underlying.value = value}
+        set(value) {underlying.value = mutator?.invoke(value) ?: value}
 
     override fun addObserver(observer: IBindObserver<T>, trigger: Boolean): IContract = ObserverContract(observer)
-        .also { if( trigger) observer.trigger?.invoke(field, field) }
+        .also { if( trigger) observer.triggers?.forEach { it(field,field) }}
     fun bindTo( root: Bindable<T>): IContract
     {
         val oldUnderlying = underlying
@@ -38,11 +38,13 @@ class Bindable<T>(default: T) : IBindable<T>
 
     private var underlying = Underlying(default, this)
 
-    private val triggers get() = observers.mapRemoveIfNull { it.trigger }
+    private val triggers get() = observers
+            .mapRemoveIfNull { it.triggers }
+            .flatten()
     private val observers = mutableListOf<IBindObserver<T>>()
     private val bindList = mutableListOf<Bindable<T>>()
 
-    private class Underlying<T>( default: T, root: Bindable<T>) {
+    private class Underlying<T>( default: T, root: Bindable<T>)  {
         var value: T = default
             set(value) {
                 val prev = field
