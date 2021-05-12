@@ -10,7 +10,7 @@ import javafx.scene.control.Slider
 import javafx.scene.layout.Priority
 import javafx.scene.transform.Affine
 import javafx.scene.transform.Scale
-import old.rb.extendo.delegates.OnChangeDelegate
+import rb.extendo.delegates.OnChangeDelegate
 import old.rb.owl.bindable.Bindable
 import old.rbJvm.jvm.addWeakObserver
 import rb.vectrix.mathUtil.d

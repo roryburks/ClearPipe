@@ -3,7 +3,7 @@ package clearpipe.ui.mainViews.center
 import clearpipe.model.master.IMasterControl
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
-import old.rb.extendo.delegates.OnChangeDelegate
+import rb.extendo.delegates.OnChangeDelegate
 import old.rbJvm.jvm.javafx.intBind
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindable.addObserver

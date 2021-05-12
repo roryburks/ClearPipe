@@ -5,7 +5,7 @@ import clearpipe.model.animation.AafHitboxK
 import javafx.collections.FXCollections
 import javafx.scene.control.ListCell
 import javafx.util.Callback
-import old.rb.extendo.delegates.OnChangeDelegate
+import rb.extendo.delegates.OnChangeDelegate
 import rb.vectrix.intersect.CollisionCircle
 import rb.vectrix.intersect.CollisionRigidRect
 import tornadofx.Controller

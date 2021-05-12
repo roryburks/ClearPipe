@@ -11,7 +11,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import javafx.scene.transform.Affine
-import old.rb.extendo.delegates.OnChangeDelegate
+import rb.extendo.delegates.OnChangeDelegate
 import old.rbJvm.jvm.javafx.selectedBind
 import old.rbJvm.jvm.javafx.valueBind
 import old.rb.owl.Observable

@@ -1,6 +1,6 @@
 package clearpipe.model.animation
 
-import old.rb.extendo.extensions.toHashMap
+import rb.extendo.extensions.toHashMap
 import old.rb.owl.bindable.Bindable
 import old.rb.owl.bindableMList.BindableMList
 import old.rb.owl.bindableMList.IBindableMList

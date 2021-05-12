@@ -1,6 +1,6 @@
 package clearmap.model.clearWaterZone
 
-import old.rb.extendo.delegates.OnChangeDelegate
+import rb.extendo.delegates.OnChangeDelegate
 import old.rb.owl.bindableMList.BindableMListSet
 
 

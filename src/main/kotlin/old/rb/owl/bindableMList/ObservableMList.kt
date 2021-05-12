@@ -1,10 +1,10 @@
 package old.rb.owl.bindableMList
 
 import old.rb.IContract
-import old.rb.extendo.dataStructures.SinglyCollection
-import old.rb.extendo.dataStructures.SinglySet
-import old.rb.extendo.extensions.asHashSet
+import rb.extendo.dataStructures.SinglyCollection
+import rb.extendo.extensions.asHashSet
 import old.rb.owl.IObserver
+import rb.extendo.dataStructures.SinglySet
 
 
 class ObservableMList<T>

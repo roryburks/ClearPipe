@@ -1,7 +1,7 @@
 package old.rb.owl.bindable
 
 import old.rb.IContract
-import old.rb.extendo.extensions.mapRemoveIfNull
+import rb.extendo.extensions.mapRemoveIfNull
 import kotlin.reflect.KProperty
 
 class Bindable<T>(default: T) : IBindable<T>

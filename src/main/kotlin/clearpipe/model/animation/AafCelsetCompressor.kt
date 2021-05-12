@@ -3,9 +3,9 @@ package clearpipe.model.animation
 import javafx.scene.SnapshotParameters
 import javafx.scene.canvas.Canvas
 import javafx.scene.paint.Color
-import old.rb.extendo.extensions.nest
-import old.rb.extendo.extensions.pop
-import old.rb.extendo.extensions.toLookup
+import rb.extendo.extensions.nest
+import rb.extendo.extensions.pop
+import rb.extendo.extensions.toLookup
 import rb.vectrix.linear.Vec2i
 import rb.vectrix.mathUtil.d
 import rb.vectrix.rectanglePacking.ModifiedSleatorAlgorithm
