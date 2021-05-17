@@ -1,6 +1,6 @@
 package old.rbJvm.jvm.javafx
 
-import clearpipe.ui.mainViews.addValueListener
+import clearpipev1.ui.mainViews.addValueListener
 import javafx.scene.control.ListView
 import javafx.scene.control.Slider
 import javafx.scene.control.TextField

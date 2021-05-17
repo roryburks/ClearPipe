@@ -2,10 +2,11 @@ root: ../src/main/kotlin
 
 /rb/animo
 /rb/extendo
-/rb/vectrix
 /rb/file
-/rb/glow
 /rb/global
+/rb/glow
+/rb/owl
+/rb/vectrix
 
 /rbJvm/animo
 /rbJvm/glow
