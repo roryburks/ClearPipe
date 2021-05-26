@@ -11,3 +11,6 @@ root: ../src/main/kotlin
 /rbJvm/animo
 /rbJvm/glow
 /rbJvm/file
+
+/sgui/core
+/sgui/swing

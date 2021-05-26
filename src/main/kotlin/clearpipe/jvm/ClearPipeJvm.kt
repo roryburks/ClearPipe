@@ -1,5 +1,6 @@
 package clearpipe.jvm
 
+import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
 fun main() {
@@ -12,6 +13,9 @@ class ClearPipeJvm  {
             UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName())
         }catch (e : Exception) {
             e.printStackTrace()
+
+            SwingUtilities.invokeAndWait {
+            }
         }
     }
 }
