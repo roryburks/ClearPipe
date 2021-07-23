@@ -2,9 +2,11 @@ package clearpipev1.cli.commands
 
 import rb.animo.io.aaf.AafFile
 import rb.animo.io.aaf.reader.AafReaderFactory
-import rb.file.BufferedFileReader
-import rbJvm.file.JvmInputStreamFileReader
+import rb.file.BufferedReadStream
+import rbJvm.file.JvmRandomAccessFileBinaryReadStream
+import rbJvm.file.util.toBufferedRead
 import java.io.File
+import java.io.RandomAccessFile
 
 object ParseExportAafCommand {
     enum class ParseExportFormat {
@@ -68,12 +70,16 @@ object ParseExportAafCommand {
     }
 
     fun parseFile( file: File) : AafFile? {
-        try {
-            val reader = BufferedFileReader(JvmInputStreamFileReader(file.inputStream()))
-            val aafReader = AafReaderFactory.readVersionAndGetReader(reader)
-            return aafReader.read(reader)
+        return try {
+            val reader = file.toBufferedRead()
+            try {
+                val aafReader = AafReaderFactory.readVersionAndGetReader(reader)
+                aafReader.read(reader)
+            }finally {
+                reader.close()
+            }
         }catch (e: Throwable) {
-            return null
+            null
         }
     }
 }

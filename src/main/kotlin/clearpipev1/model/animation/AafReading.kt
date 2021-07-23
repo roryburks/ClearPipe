@@ -4,10 +4,10 @@ import javafx.scene.image.Image
 import rb.animo.io.aaf.AafColisionMapper
 import rb.animo.io.aaf.AafFile
 import rb.animo.io.aaf.reader.AafReaderFactory
-import rb.file.BufferedFileReader
 import rb.vectrix.mathUtil.s
 import rb.vectrix.shapes.RectI
 import rbJvm.file.JvmInputStreamFileReader
+import rbJvm.file.util.toBufferedRead
 import java.io.File
 
 object AafReading {
@@ -16,11 +16,15 @@ object AafReading {
         val img = Image(pngFile.toURI().toString())
 
         // Read AafFile
-        val aafFileReader = BufferedFileReader( JvmInputStreamFileReader(aafFile.inputStream()))
-        val aafReader = AafReaderFactory.readVersionAndGetReader(aafFileReader)
-        val aaf = aafReader.read(aafFileReader)
+        val reader = aafFile.toBufferedRead()
+        try {
+            val aafReader = AafReaderFactory.readVersionAndGetReader(reader)
+            val aaf = aafReader.read(reader)
 
-        return convert(aaf, img, pngFile.nameWithoutExtension)
+            return convert(aaf, img, pngFile.nameWithoutExtension)
+        }finally {
+            reader.close()
+        }
     }
 
     fun convert( aaf: AafFile, img: Image, celSetName: String) : AafProjectImportSet {

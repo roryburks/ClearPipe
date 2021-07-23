@@ -4,7 +4,8 @@ import javafx.embed.swing.SwingFXUtils
 import rb.animo.io.aaf.*
 import rb.animo.io.aaf.writer.AafWriterFactory
 import rb.vectrix.mathUtil.i
-import rbJvm.file.writing.JvmRaWriter
+import rbJvm.file.util.toBufferedWrite
+import rbJvm.file.util.toWrite
 import java.io.File
 import java.io.RandomAccessFile
 import javax.imageio.ImageIO
@@ -26,8 +27,12 @@ object AafWriting {
         aafFile.createNewFile()
 
         val ra = RandomAccessFile(aafFile, "rw")
-        val writer = JvmRaWriter(ra)
-        AafWriterFactory.makeWriter(4).write(writer, converted)
+        val writer = aafFile.toBufferedWrite().toWrite(true)
+        try {
+            AafWriterFactory.makeWriter(4).write(writer, converted)
+        }finally {
+            writer.close()
+        }
     }
 
     fun convert( project: MAafProject) : AafFile {
